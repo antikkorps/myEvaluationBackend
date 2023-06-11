@@ -14,28 +14,24 @@ const Evaluation = function (evaluation) {
 
 //create
 Evaluation.create = (newEvaluation, result) => {
-  //choose myEvaluations database and insert new evaluation into evaluations table
-
-  sql.query('USE myEvaluations', (error, res) => {
-    if (error) {
+  // Sélection de la base de données
+  sql
+    .query('USE myEvaluations')
+    .then(() => {
+      // Insertion dans la base de données
+      return sql.query('INSERT INTO evaluations SET ?', newEvaluation);
+    })
+    .then((res) => {
+      console.log('created evaluation: ', {
+        id: res.insertId,
+        ...newEvaluation,
+      });
+      result(null, { id: res.insertId, ...newEvaluation });
+    })
+    .catch((error) => {
       console.log('error: ', error);
       result(error, null);
-      return;
-    }
-  });
-
-  sql.query('INSERT INTO evaluations SET ?', newEvaluation, (error, res) => {
-    if (error) {
-      console.log('error: ', error);
-      result(error, null);
-      return;
-    }
-    console.log('created evaluation: ', {
-      id: res.insertId,
-      ...newEvaluation,
     });
-    result(null, { id: res.insertId, ...newEvaluation });
-  });
 };
 
 //find by id
