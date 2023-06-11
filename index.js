@@ -6,8 +6,7 @@ const cors = require('cors');
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200,
+  origin: 'http://localhost:8081',
 };
 
 app.use(cors(corsOptions));
@@ -23,7 +22,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to my application.' });
 });
 
-// require('./app/routes/myEvaluation.routes')(app);
+require('./routes/evaluations.routes')(app);
 
 //set port, listen for requests
 const PORT = process.env.PORT || 8080;
