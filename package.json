@@ -1,0 +1,23 @@
+{
+  "name": "myevaluationbackend",
+  "version": "1.0.0",
+  "description": "The backend for a service that will help building evaluation for different contexts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "restapi"
+  ],
+  "author": "Franck Vienot",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
+  }
+}
