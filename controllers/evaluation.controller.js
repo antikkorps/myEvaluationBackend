@@ -14,11 +14,11 @@ exports.create = (req, res) => {
     id: req.body.id,
     name: req.body.name,
     description: req.body.description,
-    date: req.body.date,
-    type: req.body.type,
-    status: req.body.status,
-    user_id: req.body.user_id,
-    published: req.body.published,
+    // date: req.body.date,
+    // type: req.body.type,
+    // status: req.body.status,
+    // user_id: req.body.user_id,
+    // published: req.body.published,
   });
 
   //save evaluation in the database
