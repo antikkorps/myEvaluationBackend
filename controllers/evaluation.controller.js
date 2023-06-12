@@ -18,7 +18,7 @@ exports.create = (req, res) => {
     // type: req.body.type,
     // status: req.body.status,
     // user_id: req.body.user_id,
-    // published: req.body.published,
+    published: req.body.published,
   });
 
   //save evaluation in the database
