@@ -18,10 +18,6 @@ Evaluation.create = (newEvaluation, result) => {
   sql
     .query('USE myEvaluations')
     .then(() => {
-      // Afficher les valeurs de newEvaluation
-      console.log('newEvaluation: ', newEvaluation);
-      // Afficher les valeurs de newEvaluation
-      console.log('newEvaluation: ', newEvaluation);
       // Insertion dans la base de données
       return sql.query('INSERT INTO evaluations SET ?', newEvaluation);
     })
