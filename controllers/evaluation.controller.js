@@ -14,10 +14,10 @@ exports.create = (req, res) => {
     id: req.body.id,
     name: req.body.name,
     description: req.body.description,
-    // date: req.body.date,
-    // type: req.body.type,
-    // status: req.body.status,
-    // user_id: req.body.user_id,
+    date: req.body.date,
+    type: req.body.type,
+    status: req.body.status,
+    user_id: req.body.user_id,
     published: req.body.published,
   });
 
@@ -35,34 +35,34 @@ exports.create = (req, res) => {
 
 //retrieve all evaluations from the database
 exports.findAll = (req, res) => {
-  Evaluation.getAll((error, data) => {
-    if (error) {
-      res.status(500).send({
+  Evaluation.getAll()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(500).json({
         message: error.message || 'Some error occurred while retrieving.',
       });
-    } else {
-      res.send(data);
-    }
-  });
+    });
 };
 
 //find a single evaluation with an id
 exports.findOne = (req, res) => {
-  Evaluation.findById(req.params.id, (error, data) => {
-    if (error) {
-      if (error.kind === 'not_found') {
+  Evaluation.findById(req.params.id)
+    .then((data) => {
+      if (!data) {
         res.status(404).send({
           message: `Not found evaluation with id ${req.params.id}.`,
         });
       } else {
-        res.status(500).send({
-          message: 'Error retrieving evaluation with id ' + req.params.id,
-        });
+        res.send(data);
       }
-    } else {
-      res.send(data);
-    }
-  });
+    })
+    .catch((error) => {
+      res.status(500).send({
+        message: 'Error retrieving evaluation with id ' + req.params.id,
+      });
+    });
 };
 
 //find all published evaluations

@@ -1,15 +1,16 @@
 const sql = require('./db.js');
+const db = require('../models/db.js');
 
 //constructor
 const Evaluation = function (evaluation) {
   this.id = evaluation.id;
   this.name = evaluation.name;
   this.description = evaluation.description;
-  //   this.date = evaluation.date;
-  //   this.type = evaluation.type;
-  //   this.status = evaluation.status;
-  //   this.user_id = evaluation.user_id;
-  //   this.published = evaluation.published;
+  // this.date = evaluation.date;
+  // this.type = evaluation.type;
+  // this.status = evaluation.status;
+  // this.user_id = evaluation.user_id;
+  // this.published = evaluation.published;
 };
 
 //create
@@ -35,53 +36,54 @@ Evaluation.create = (newEvaluation, result) => {
 };
 
 //find by id
-Evaluation.findById = (evaluationId, result) => {
-  sql.query(
-    `SELECT * FROM evaluations WHERE id = ${evaluationId}`,
-    (error, res) => {
+Evaluation.findById = (evaluationId) => {
+  const query = `SELECT * FROM evaluations WHERE id = ?`;
+
+  return new Promise((resolve, reject) => {
+    sql.query(query, [evaluationId], (error, res) => {
       if (error) {
         console.log('error: ', error);
-        result(error, null);
-        return;
+        reject(error);
+      } else {
+        if (res.length) {
+          console.log('found evaluation: ', res[0]);
+          resolve(res[0]);
+        } else {
+          reject({ kind: 'not_found' });
+        }
       }
-      if (res.length) {
-        console.log('found evaluation: ', res[0]);
-        result(null, res[0]);
-        return;
-      }
-      //not found evaluation with the id
-      result({ kind: 'not_found' }, null);
-    }
-  );
-};
-
-//get all
-Evaluation.getAll = (result) => {
-  sql.query('SELECT * FROM evaluations', (error, res) => {
-    if (error) {
-      console.log('error: ', error);
-      result(null, error);
-      return;
-    }
-    console.log('evaluations: ', res);
-    result(null, res);
+    });
   });
 };
 
+//get all
+Evaluation.getAll = () => {
+  const query = 'SELECT * FROM evaluations';
+  return db
+    .query(query)
+    .then(([results]) => {
+      console.log('evaluations: ', results);
+      return results;
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
+    });
+};
+
 //get all published
-Evaluation.getAllPublished = (result) => {
-  sql.query(
-    'SELECT * FROM evaluations WHERE published = true',
-    (error, res) => {
-      if (error) {
-        console.log('error: ', error);
-        result(null, error);
-        return;
-      }
-      console.log('evaluations: ', res);
-      result(null, res);
-    }
-  );
+Evaluation.getAllPublished = () => {
+  const query = 'SELECT * FROM evaluations WHERE published = true';
+  return db
+    .query(query)
+    .then(([results]) => {
+      console.log('evaluations: ', results);
+      return results;
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
+    });
 };
 
 //update by id
