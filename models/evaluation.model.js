@@ -87,10 +87,11 @@ Evaluation.getAllPublished = () => {
 };
 
 //update by id
-Evaluation.updateById = (id, evaluation, result) => {
-  sql.query(
-    'UPDATE evaluations SET name = ?, description = ?, date = ?, type = ?, status = ?, user_id = ?, published = ? WHERE id = ?',
-    [
+Evaluation.updateById = (id, evaluation) => {
+  const query = `UPDATE evaluations SET name = ?, description = ?, date = ?, type = ?, status = ?, user_id = ?, published = ? WHERE id = ?`;
+
+  return db
+    .query(query, [
       evaluation.name,
       evaluation.description,
       evaluation.date,
@@ -99,22 +100,18 @@ Evaluation.updateById = (id, evaluation, result) => {
       evaluation.user_id,
       evaluation.published,
       id,
-    ],
-    (error, res) => {
-      if (error) {
-        console.log('error: ', error);
-        result(null, error);
-        return;
-      }
-      if (res.affectedRows == 0) {
-        //not found evaluation with the id
-        result({ kind: 'not_found' }, null);
-        return;
-      }
-      console.log('updated evaluation: ', { id: id, ...evaluation });
-      result(null, { id: id, ...evaluation });
-    }
-  );
+    ])
+    .then(([results]) => {
+      console.log('updated evaluation: ', {
+        id: id,
+        ...evaluation,
+      });
+      return { id: id, ...evaluation };
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
+    });
 };
 
 //remove by id
