@@ -63,7 +63,7 @@ Role.getAll = () => {
 
 //update by id
 Role.updateById = (id, role) => {
-    const query = `UPDATE roles SET libelle = ?, slug = ? WHERE id = ?`;
+    const query = `UPDATE roles SET name = ?, slug = ?, description = ? WHERE id = ?`;
     return db
       .query(query, [
         role.name,

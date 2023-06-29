@@ -12,8 +12,9 @@ exports.create = (req, res) => {
     //create a role
     const role = new Role({
       id: req.body.id,
-      libelle: req.body.libelle,
+      name: req.body.name,
       slug: req.body.slug,
+      description: req.body.description
     });
   
     //Save contrat in the database
@@ -44,11 +45,11 @@ exports.findAll = (req, res) => {
 
 //find a single client with an id
 exports.findOne = (req, res) => {
-    Client.findById(req.params.id)
+    Role.findById(req.params.id)
       .then((data) => {
         if (!data) {
           res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
+            message: `Not found role with id ${req.params.id}.`,
           });
         } else {
           res.send(data);
@@ -56,7 +57,7 @@ exports.findOne = (req, res) => {
       })
       .catch((error) => {
         res.status(500).send({
-          message: `Error retrieving client with id ${req.params.id}.`,
+          message: `Error retrieving role with id ${req.params.id}.`,
         });
       });
 };
@@ -70,11 +71,11 @@ exports.update = (req, res) => {
       });
     }
   
-    Client.updateById(req.params.id, new Client(req.body))
+    Role.updateById(req.params.id, new Role(req.body))
       .then((data) => {
         if (!data) {
           res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
+            message: `Not found role with id ${req.params.id}.`,
           });
         } else {
           res.send(data);
@@ -82,7 +83,7 @@ exports.update = (req, res) => {
       })
       .catch((error) => {
         res.status(500).send({
-          message: `Error updating client with id ${req.params.id}.`,
+          message: `Error updating role with id ${req.params.id}.`,
         });
       });
 };
@@ -90,19 +91,19 @@ exports.update = (req, res) => {
 
 //delete a client with the specified id in the request
 exports.delete = (req, res) => {
-    Client.remove(req.params.id)
+    Role.remove(req.params.id)
       .then((data) => {
         if (!data) {
           res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
+            message: `Not found role with id ${req.params.id}.`,
           });
         } else {
-          res.send({ message: 'Client was deleted successfully!' });
+          res.send({ message: 'Role was deleted successfully!' });
         }
       })
       .catch((error) => {
         res.status(500).send({
-          message: `Could not delete client with id ${req.params.id}.`,
+          message: `Could not delete role with id ${req.params.id}.`,
         });
       });
 };
@@ -110,16 +111,16 @@ exports.delete = (req, res) => {
 
 //delete all clients from the database
 exports.deleteAll = (req, res) => {
-    Client.removeAll()
+    Role.removeAll()
       .then((data) => {
         res.send({
-          message: `${data.affectedRows} clients were deleted successfully!`,
+          message: `${data.affectedRows} roles were deleted successfully!`,
         });
       })
       .catch((error) => {
         res.status(500).send({
           message:
-            error.message || 'Some error occurred while removing all clients.',
+            error.message || 'Some error occurred while removing all roles.',
         });
       });
 };
