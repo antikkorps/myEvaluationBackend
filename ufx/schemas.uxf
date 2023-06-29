@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>140</x><y>110</y><w>90</w><h>150</h></coordinates><panel_attributes>User
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>140</x><y>130</y><w>90</w><h>150</h></coordinates><panel_attributes>User
 --
 - id
 - nom
@@ -8,37 +8,37 @@
 - fonction
 - role
 - client_id
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>740</x><y>130</y><w>90</w><h>80</h></coordinates><panel_attributes>Role
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>740</x><y>150</y><w>90</w><h>80</h></coordinates><panel_attributes>Role
 --
 - id
 - name
 - slug
 - description
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>140</y><w>90</w><h>80</h></coordinates><panel_attributes>role_user
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>160</y><w>90</w><h>80</h></coordinates><panel_attributes>role_user
 --
 - id_role
 - id_user
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>150</y><w>250</w><h>50</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>170</y><w>250</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=1
 m2=0..1
-a &gt;</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element><element><id>Relation</id><coordinates><x>530</x><y>150</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=-
+a &gt;</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element><element><id>Relation</id><coordinates><x>530</x><y>170</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=0..1
 m2=1
-&lt; a </panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>430</y><w>90</w><h>150</h></coordinates><panel_attributes>Client
+&lt; a </panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>450</y><w>90</w><h>150</h></coordinates><panel_attributes>Client
 --
 - id
 - name
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>70</x><y>210</y><w>90</w><h>340</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>70</x><y>230</y><w>90</w><h>340</h></coordinates><panel_attributes>lt=-
 m1=0..1
 m2=1..n
 
-a &gt;</panel_attributes><additional_attributes>70;310;10;310;10;10;70;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>470</y><w>140</w><h>120</h></coordinates><panel_attributes>Contrats
+a &gt;</panel_attributes><additional_attributes>70;310;10;310;10;10;70;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>490</y><w>140</w><h>120</h></coordinates><panel_attributes>Contrats
 --
 - id
 - numero de contrat
 - titre
 - description
-- client_id</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>500</y><w>250</w><h>60</h></coordinates><panel_attributes>lt=-
+- client_id</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>520</y><w>250</w><h>60</h></coordinates><panel_attributes>lt=-
 m1=1
 m2=0..1
 a &gt;
