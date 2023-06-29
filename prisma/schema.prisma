@@ -15,8 +15,6 @@ model user {
   password String   @db.VarChar(255)
   role     String   @db.VarChar(255)
   fonction String @db.VarChar(255)
-  client   Client  @relation(fields: [clientId], references: [id])
-  clientId Int     @unique 
 }
 
 model role {
@@ -24,8 +22,6 @@ model role {
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
   slug String @db.VarChar(255)
-  user User @relation(fields: [userId], references: [id])
-  userId Int @unique
 }
 
 model evaluation {
