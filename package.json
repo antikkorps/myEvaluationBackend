@@ -21,5 +21,8 @@
     "express": "^4.18.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.3.5"
+  },
+  "devDependencies": {
+    "prisma": "^4.16.1"
   }
 }
