@@ -8,8 +8,8 @@ module.exports = (app) => {
   //retrieve all contrats
   router.get('/', contrat.findAll);
 
-  // //retrieve all published contrats
-  // router.get('/published', contrat.findAllPublished);
+  //retrieve all published contrats
+  router.get('/published', contrat.findAllPublished);
 
   //retrieve a single contrat with id
   router.get('/:id', contrat.findOne);

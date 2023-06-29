@@ -1,16 +1,6 @@
 const sql = require('./db.js');
 const db = require('../models/db.js');
 
-//constructor
-const Contrat = function (contrat) {
-  this.id = contrat.id;
-  this.name = contrat.name;
-  this.description = contrat.description;
-  this.status = contrat.status;
-  this.begin_date = contrat.begin_date;
-  this.end_date = contrat.end_date;
-};
-
 //create
 Contrat.create = (newContrat, result) => {
   // Sélection de la base de données
