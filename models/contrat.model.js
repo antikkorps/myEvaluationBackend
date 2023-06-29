@@ -1,6 +1,8 @@
 const sql = require('./db.js');
 const db = require('../models/db.js');
 
+const Contrat = {};
+
 //create
 Contrat.create = (newContrat, result) => {
   // Sélection de la base de données
@@ -60,8 +62,8 @@ Contrat.getAll = () => {
     });
 };
 
-//get all published
-Contrat.getAllPublished = () => {
+//find all published
+Contrat.findAllPublished = () => {
   const query = `SELECT * FROM contrats WHERE published = true`;
   return db
     .query(query)
@@ -84,6 +86,7 @@ Contrat.updateById = (id, contrat) => {
       contrat.name,
       contrat.description,
       contrat.status,
+      contrat.published,
       contrat.begin_date,
       contrat.end_date,
       id,

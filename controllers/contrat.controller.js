@@ -63,6 +63,19 @@ exports.findOne = (req, res) => {
     });
 };
 
+//find all published evaluations
+exports.findAllPublished = (req, res) => {
+  Evaluation.getAllPublished((error, data) => {
+    if (error) {
+      res.status(500).send({
+        message: error.message || 'Some error occurred while retrieving.',
+      });
+    } else {
+      res.send(data);
+    }
+  });
+};
+
 //update a contrat by the id in the request
 exports.update = (req, res) => {
   //validate request

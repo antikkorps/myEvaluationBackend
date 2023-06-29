@@ -1,6 +1,8 @@
 const sql = require('./db.js');
 const db = require('../models/db.js');
 
+const Evaluation = {};
+
 //create
 Evaluation.create = (newEvaluation, result) => {
   // Sélection de la base de données
@@ -8,7 +10,7 @@ Evaluation.create = (newEvaluation, result) => {
     .query('USE myEvaluations')
     .then(() => {
       // Insertion dans la base de données
-      return sql.query('INSERT INTO evaluations SET ?', newEvaluation);
+      return sql.query('INSERT INTO evaluation SET ?', newEvaluation);
     })
     .then((res) => {
       console.log('created evaluation: ', {
@@ -25,7 +27,7 @@ Evaluation.create = (newEvaluation, result) => {
 
 //find by id
 Evaluation.findById = (evaluationId) => {
-  const query = `SELECT * FROM evaluations WHERE id = ?`;
+  const query = `SELECT * FROM evaluation WHERE id = ?`;
 
   return new Promise((resolve, reject) => {
     sql.query(query, [evaluationId], (error, res) => {
@@ -46,7 +48,7 @@ Evaluation.findById = (evaluationId) => {
 
 //get all
 Evaluation.getAll = () => {
-  const query = 'SELECT * FROM evaluations';
+  const query = 'SELECT * FROM evaluation';
   return db
     .query(query)
     .then(([results]) => {
@@ -61,7 +63,7 @@ Evaluation.getAll = () => {
 
 //get all published
 Evaluation.getAllPublished = () => {
-  const query = 'SELECT * FROM evaluations WHERE published = true';
+  const query = 'SELECT * FROM evaluation WHERE published = true';
   return db
     .query(query)
     .then(([results]) => {
@@ -76,7 +78,7 @@ Evaluation.getAllPublished = () => {
 
 //update by id
 Evaluation.updateById = (id, evaluation) => {
-  const query = `UPDATE evaluations SET name = ?, description = ?, date = ?, type = ?, status = ?, user_id = ?, published = ? WHERE id = ?`;
+  const query = `UPDATE evaluation SET name = ?, description = ?, date = ?, type = ?, status = ?, user_id = ?, published = ? WHERE id = ?`;
 
   return db
     .query(query, [
@@ -105,7 +107,7 @@ Evaluation.updateById = (id, evaluation) => {
 //remove by id
 Evaluation.remove = (id, result) => {
   return db
-    .query('DELETE FROM evaluations WHERE id = ?', id)
+    .query('DELETE FROM evaluation WHERE id = ?', id)
     .then(([results]) => {
       console.log('deleted evaluation with id: ', id);
       return results.affectedRows;
@@ -119,7 +121,7 @@ Evaluation.remove = (id, result) => {
 //remove all
 Evaluation.removeAll = (result) => {
   return db
-    .query('DELETE FROM evaluations')
+    .query('DELETE FROM evaluation')
     .then(([results]) => {
       console.log(`deleted ${results.affectedRows} evaluations`);
       return results.affectedRows;
