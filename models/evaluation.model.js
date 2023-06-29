@@ -1,18 +1,6 @@
 const sql = require('./db.js');
 const db = require('../models/db.js');
 
-//constructor
-const Evaluation = function (evaluation) {
-  this.id = evaluation.id;
-  this.name = evaluation.name;
-  this.description = evaluation.description;
-  // this.date = evaluation.date;
-  // this.type = evaluation.type;
-  // this.status = evaluation.status;
-  // this.user_id = evaluation.user_id;
-  // this.published = evaluation.published;
-};
-
 //create
 Evaluation.create = (newEvaluation, result) => {
   // Sélection de la base de données
