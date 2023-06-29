@@ -70,6 +70,21 @@ Contrat.getAll = () => {
     });
 };
 
+//get all published
+Contrat.getAllPublished = () => {
+  const query = `SELECT * FROM contrats WHERE published = true`;
+  return db
+    .query(query)
+    .then((res) => {
+      console.log('contrats: ', res);
+      return res;
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
+    });
+};
+
 //update by id
 Contrat.updateById = (id, contrat) => {
   const query = `UPDATE contrats SET name = ?, description = ?, status = ?, begin_date = ?, end_date = ? WHERE id = ?`;
@@ -98,36 +113,30 @@ Contrat.updateById = (id, contrat) => {
 
 //remove by id
 Contrat.remove = (id) => {
-  return new Promise((resolve, reject) => {
-    sql.query('DELETE FROM contrats WHERE id = ?', id, (error, res) => {
-      if (error) {
-        console.log('error: ', error);
-        reject(error);
-      } else {
-        if (res.affectedRows == 0) {
-          reject({ kind: 'not_found' });
-        } else {
-          console.log('deleted contrat with id: ', id);
-          resolve(res);
-        }
-      }
+  return db
+    .query('DELETE FROM contrats WHERE id = ?', id)
+    .then((res) => {
+      console.log('deleted contrat with id: ', id);
+      return res;
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
     });
-  });
 };
 
 //remove all
 Contrat.removeAll = () => {
-  return new Promise((resolve, reject) => {
-    sql.query('DELETE FROM contrats', (error, res) => {
-      if (error) {
-        console.log('error: ', error);
-        reject(error);
-      } else {
-        console.log(`deleted ${res.affectedRows} contrats`);
-        resolve(res);
-      }
+  return db
+    .query('DELETE FROM contrats')
+    .then((res) => {
+      console.log(`deleted ${res.affectedRows} contrats`);
+      return res;
+    })
+    .catch((error) => {
+      console.log('error: ', error);
+      throw error;
     });
-  });
 };
 
 module.exports = Contrat;

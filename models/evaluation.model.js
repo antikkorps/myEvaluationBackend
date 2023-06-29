@@ -116,33 +116,30 @@ Evaluation.updateById = (id, evaluation) => {
 
 //remove by id
 Evaluation.remove = (id, result) => {
-  sql.query('DELETE FROM evaluations WHERE id = ?', id, (error, res) => {
-    if (error) {
+  return db
+    .query('DELETE FROM evaluations WHERE id = ?', id)
+    .then(([results]) => {
+      console.log('deleted evaluation with id: ', id);
+      return results.affectedRows;
+    })
+    .catch((error) => {
       console.log('error: ', error);
-      result(null, error);
-      return;
-    }
-    if (res.affectedRows == 0) {
-      //not found evaluation with the id
-      result({ kind: 'not_found' }, null);
-      return;
-    }
-    console.log('deleted evaluation with id: ', id);
-    result(null, res);
-  });
+      throw error;
+    });
 };
 
 //remove all
 Evaluation.removeAll = (result) => {
-  sql.query('DELETE FROM evaluations', (error, res) => {
-    if (error) {
+  return db
+    .query('DELETE FROM evaluations')
+    .then(([results]) => {
+      console.log(`deleted ${results.affectedRows} evaluations`);
+      return results.affectedRows;
+    })
+    .catch((error) => {
       console.log('error: ', error);
-      result(null, error);
-      return;
-    }
-    console.log(`deleted ${res.affectedRows} evaluations`);
-    result(null, res);
-  });
+      throw error;
+    });
 };
 
 module.exports = Evaluation;
