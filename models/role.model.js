@@ -2,20 +2,20 @@ const sql = require('./db.js');
 const db = require('../models/db.js');
 
 //create
-Client.create = (newClient, result) => {
+Role.create = (newRole, result) => {
     // Sélection de la base de données
     sql
       .query('USE myEvaluations')
       .then(() => {
         // Insertion dans la base de données
-        return sql.query('INSERT INTO clients SET ?', newClient);
+        return sql.query('INSERT INTO roles SET ?', newRole);
     })
       .then((res) => {
-        console.log('created client: ', {
+        console.log('created role: ', {
           id: res.insertId,
-          ...newClient,
+          ...newRole,
         });
-        result(null, { id: res.insertId, ...newClient });
+        result(null, { id: res.insertId, ...newRole });
     })
       .catch((error) => {
         console.log('error: ', error);
@@ -24,17 +24,17 @@ Client.create = (newClient, result) => {
 };
 
 //find by id
-Client.findById = (clientId) => {
-    const query = `SELECT * FROM clients WHERE id = ?`;
+Role.findById = (roleId) => {
+    const query = `SELECT * FROM roles WHERE id = ?`;
   
     return new Promise((resolve, reject) => {
-      sql.query(query, [clientId], (error, res) => {
+      sql.query(query, [roleId], (error, res) => {
         if (error) {
           console.log('error: ', error);
           reject(error);
         } else {
           if (res.length) {
-            console.log('found client: ', res[0]);
+            console.log('found role: ', res[0]);
             resolve(res[0]);
           } else {
             reject({ kind: 'not_found' });
@@ -45,13 +45,13 @@ Client.findById = (clientId) => {
 };
 
 //get all
-Client.getAll = () => {
-    const query = `SELECT * FROM clients`;
+Role.getAll = () => {
+    const query = `SELECT * FROM roles`;
   
     return db
       .query(query)
       .then((res) => {
-        console.log('clients: ', res);
+        console.log('roles: ', res);
         return res;
       })
       .catch((error) => {
@@ -62,18 +62,17 @@ Client.getAll = () => {
 
 
 //update by id
-Client.updateById = (id, client) => {
-    const query = `UPDATE clients SET name = ? WHERE id = ?`;
-    
+Role.updateById = (id, role) => {
+    const query = `UPDATE roles SET libelle = ?, slug = ? WHERE id = ?`;
     return db
       .query(query, [
-        client.name,
+        role.name,
         id,
       ])
       .then((res) => {
-        console.log('updated client: ', {
+        console.log('updated role: ', {
           id: id,
-          ...client,
+          ...role,
         });
         return res;
       })
@@ -84,11 +83,11 @@ Client.updateById = (id, client) => {
 };
 
 //remove by id
-Client.remove = (id) => {
+Role.remove = (id) => {
     return db
-      .query('DELETE FROM clients WHERE id = ?', id)
+      .query('DELETE FROM roles WHERE id = ?', id)
       .then((res) => {
-        console.log('deleted client with id: ', id);
+        console.log('deleted role with id: ', id);
         return res;
       })
       .catch((error) => {
@@ -98,11 +97,11 @@ Client.remove = (id) => {
 };
 
 //remove all
-Client.removeAll = () => {
+Role.removeAll = () => {
     return db
-      .query('DELETE FROM clients')
+      .query('DELETE FROM roles')
       .then((res) => {
-        console.log(`deleted ${res.affectedRows} clients`);
+        console.log(`deleted ${res.affectedRows} roles`);
         return res;
       })
       .catch((error) => {
@@ -111,4 +110,4 @@ Client.removeAll = () => {
       });
 };
   
-  module.exports = Client;
+  module.exports = Role;
