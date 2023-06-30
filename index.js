@@ -1,8 +1,9 @@
 require('dotenv').config();
-
+const { PrismaClient } = require('@prisma/client');
 const express = require('express');
 const cors = require('cors');
 
+const prisma = new PrismaClient();
 const app = express();
 
 const corsOptions = {
@@ -26,6 +27,7 @@ require('./routes/evaluation.routes')(app);
 require('./routes/contrat.routes')(app);
 require('./routes/role.routes')(app);
 require('./routes/client.routes')(app);
+require('./routes/user.routes')(app);
 
 //set port, listen for requests
 const PORT = process.env.PORT || 8080;

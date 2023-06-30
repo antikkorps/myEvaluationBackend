@@ -1,123 +1,112 @@
-const Role = require('../models/role.model.js');
+const { PrismaClient } = require('@prisma/client');
 
-//create and save a new role
-exports.create = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
+const prisma = new PrismaClient();
 
-  //create a role
-  const role = new Role({
-    id: req.body.id,
-    name: req.body.name,
-    slug: req.body.slug,
-    description: req.body.description,
-  });
-
-  //Save contrat in the database
-  Role.create(role, (error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while creating.',
+const RoleController = {
+  // Créer un nouvel utilisateur
+  async create(req, res) {
+    const { id, name, slug, description } = req.body;
+    try {
+      const newUser = await prisma.role.create({
+        data: {
+          id,
+          name,
+          slug,
+          description,
+        },
       });
-    } else {
-      res.send(data);
-    }
-  });
-};
-
-//retrieve all clients from the database
-exports.findAll = (req, res) => {
-  Role.getAll()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
+      res.status(201).json(newUser);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({
-        message: error.message || 'Some error occurred while retrieving.',
+        error: 'Une erreur est survenue lors de la création du rôle.',
       });
-    });
-};
+    }
+  },
 
-//find a single client with an id
-exports.findOne = (req, res) => {
-  Role.findById(req.params.id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found role with id ${req.params.id}.`,
-        });
-      } else {
-        res.send(data);
+  // Récupérer tous les utilisateurs
+  async findAll(req, res) {
+    try {
+      const roles = await prisma.role.findMany();
+      res.status(200).json(roles);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération des rôles.',
+      });
+    }
+  },
+
+  // Récupérer un utilisateur par son ID
+  async findOne(req, res) {
+    const { id } = req.params;
+    try {
+      const role = await prisma.role.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!role) {
+        return res.status(404).json({ error: 'Rôle non trouvé.' });
       }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error retrieving role with id ${req.params.id}.`,
+      res.status(200).json(role);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération du rôle.',
       });
-    });
+    }
+  },
+
+  // Mettre à jour un utilisateur par son ID
+  async update(req, res) {
+    const { id } = req.params;
+    const { name, slug, description } = req.body;
+    try {
+      const updatedRole = await prisma.role.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          slug,
+          description,
+        },
+      });
+      res.status(200).json(updatedRole);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la mise à jour du rôle.',
+      });
+    }
+  },
+
+  // Supprimer un utilisateur par son ID
+  async delete(req, res) {
+    const { id } = req.params;
+    try {
+      await prisma.role.delete({
+        where: { id: Number(id) },
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la suppression du rôle.',
+      });
+    }
+  },
+
+  // Supprimer tous les utilisateurs
+  async deleteAll(req, res) {
+    try {
+      await prisma.role.deleteMany();
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la suppression de tous les rôles.',
+      });
+    }
+  },
 };
 
-//update a contrat by the id in the request
-exports.update = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
-
-  Role.updateById(req.params.id, new Role(req.body))
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found role with id ${req.params.id}.`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error updating role with id ${req.params.id}.`,
-      });
-    });
-};
-
-//delete a client with the specified id in the request
-exports.delete = (req, res) => {
-  Role.remove(req.params.id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found role with id ${req.params.id}.`,
-        });
-      } else {
-        res.send({ message: 'Role was deleted successfully!' });
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Could not delete role with id ${req.params.id}.`,
-      });
-    });
-};
-
-//delete all clients from the database
-exports.deleteAll = (req, res) => {
-  Role.removeAll()
-    .then((data) => {
-      res.send({
-        message: `${data.affectedRows} roles were deleted successfully!`,
-      });
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message:
-          error.message || 'Some error occurred while removing all roles.',
-      });
-    });
-};
+module.exports = RoleController;

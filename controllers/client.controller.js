@@ -1,124 +1,120 @@
-const Client = require('../models/client.model.js');
+const { PrismaClient } = require('@prisma/client');
 
-//create and save a new contrat
-exports.create = (req, res) => {
-    //validate request
-    if (!req.body) {
-      res.status(400).send({
-        message: 'Content can not be empty!',
+const prisma = new PrismaClient();
+
+const ClientController = {
+  // Créer un nouveau client
+  async create(req, res) {
+    const { id, name } = req.body;
+    try {
+      const newClient = await prisma.client.create({
+        data: {
+          id,
+          name,
+        },
       });
-    }
-  
-    //create a client
-    const client = new Client({
-      id: req.body.id,
-      name: req.body.name,
-    });
-  
-    //Save contrat in the database
-    Client.create(client, (error, data) => {
-      if (error) {
-        res.status(500).send({
-          message: error.message || 'Some error occurred while creating.',
+      res.status(201).json(newClient);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: 'Une erreur est survenue lors de la création du client.',
         });
-      } else {
-        res.send(data);
+    }
+  },
+
+  // Récupérer tous les clients
+  async findAll(req, res) {
+    try {
+      const clients = await prisma.client.findMany();
+      res.status(200).json(clients);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: 'Une erreur est survenue lors de la récupération des clients.',
+        });
+    }
+  },
+
+  // Récupérer un client par son ID
+  async findOne(req, res) {
+    const { id } = req.params;
+    try {
+      const client = await prisma.client.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!client) {
+        return res.status(404).json({ error: 'Client non trouvé.' });
       }
-    });
-};
-
-
-//retrieve all clients from the database
-exports.findAll = (req, res) => {
-    Client.getAll()
-      .then((data) => {
-        res.json(data);
-      })
-      .catch((error) => {
-        res.status(500).json({
-          message: error.message || 'Some error occurred while retrieving.',
+      res.status(200).json(client);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: 'Une erreur est survenue lors de la récupération du client.',
         });
-      });
-};
-
-//find a single client with an id
-exports.findOne = (req, res) => {
-    Client.findById(req.params.id)
-      .then((data) => {
-        if (!data) {
-          res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
-          });
-        } else {
-          res.send(data);
-        }
-      })
-      .catch((error) => {
-        res.status(500).send({
-          message: `Error retrieving client with id ${req.params.id}.`,
-        });
-      });
-};
-
-//update a contrat by the id in the request
-exports.update = (req, res) => {
-    //validate request
-    if (!req.body) {
-      res.status(400).send({
-        message: 'Content can not be empty!',
-      });
     }
-  
-    Client.updateById(req.params.id, new Client(req.body))
-      .then((data) => {
-        if (!data) {
-          res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
-          });
-        } else {
-          res.send(data);
-        }
-      })
-      .catch((error) => {
-        res.status(500).send({
-          message: `Error updating client with id ${req.params.id}.`,
-        });
+  },
+
+  // Mettre à jour un client par son ID
+  async update(req, res) {
+    const { id } = req.params;
+    const { name } = req.body;
+    try {
+      const updatedClient = await prisma.client.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+        },
       });
+      res.status(200).json(updatedClient);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: 'Une erreur est survenue lors de la mise à jour du client.',
+        });
+    }
+  },
+
+  // Supprimer un client par son ID
+  async delete(req, res) {
+    const { id } = req.params;
+    try {
+      await prisma.client.delete({
+        where: { id: Number(id) },
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: 'Une erreur est survenue lors de la suppression du client.',
+        });
+    }
+  },
+
+  // Supprimer tous les clients
+  async deleteAll(req, res) {
+    try {
+      await prisma.client.deleteMany();
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error:
+            'Une erreur est survenue lors de la suppression de tous les clients.',
+        });
+    }
+  },
 };
 
-
-//delete a client with the specified id in the request
-exports.delete = (req, res) => {
-    Client.remove(req.params.id)
-      .then((data) => {
-        if (!data) {
-          res.status(404).send({
-            message: `Not found client with id ${req.params.id}.`,
-          });
-        } else {
-          res.send({ message: 'Client was deleted successfully!' });
-        }
-      })
-      .catch((error) => {
-        res.status(500).send({
-          message: `Could not delete client with id ${req.params.id}.`,
-        });
-      });
-};
-
-
-//delete all clients from the database
-exports.deleteAll = (req, res) => {
-    Client.removeAll()
-      .then((data) => {
-        res.send({
-          message: `${data.affectedRows} clients were deleted successfully!`,
-        });
-      })
-      .catch((error) => {
-        res.status(500).send({
-          message:
-            error.message || 'Some error occurred while removing all clients.',
-        });
-      });
-};
+module.exports = ClientController;

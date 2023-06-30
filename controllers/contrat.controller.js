@@ -1,138 +1,132 @@
-const Contrat = require('../models/contrat.model.js');
+const { PrismaClient } = require('@prisma/client');
 
-//create and save a new contrat
-exports.create = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
+const prisma = new PrismaClient();
 
-  //create a contrat
-  const contrat = new Contrat({
-    id: req.body.id,
-    name: req.body.name,
-    description: req.body.description,
-    published: req.body.published,
-    begin_date: req.body.begin_date,
-    end_date: req.body.end_date,
-  });
-
-  //Save contrat in the database
-  Contrat.create(contrat, (error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while creating.',
+const ContratController = {
+  // Create a new contrat
+  async create(req, res) {
+    const { id, name, description, published, begin_date, end_date } = req.body;
+    try {
+      const newContrat = await prisma.contrat.create({
+        data: {
+          id,
+          name,
+          description,
+          published,
+          begin_date,
+          end_date,
+        },
       });
-    } else {
-      res.send(data);
-    }
-  });
-};
-
-//retrieve all contrats from the database
-exports.findAll = (req, res) => {
-  Contrat.getAll()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
+      res.status(201).json(newContrat);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({
-        message: error.message || 'Some error occurred while retrieving.',
+        error: 'Une erreur est survenue lors de la création du contrat.',
       });
-    });
-};
-
-//find a single contrat with an id
-exports.findOne = (req, res) => {
-  Contrat.findById(req.params.id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found contrat with id ${req.params.id}.`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error retrieving contrat with id ${req.params.id}.`,
-      });
-    });
-};
-
-//find all published evaluations
-exports.findAllPublished = (req, res) => {
-  Evaluation.getAllPublished((error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while retrieving.',
-      });
-    } else {
-      res.send(data);
     }
-  });
-};
+  },
 
-//update a contrat by the id in the request
-exports.update = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
+  // Get all contrats
+  async findAll(req, res) {
+    try {
+      const contrats = await prisma.contrat.findMany();
+      res.status(200).json(contrats);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération des contrats.',
+      });
+    }
+  },
 
-  Contrat.updateById(req.params.id, new Contrat(req.body))
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found contrat with id ${req.params.id}.`,
-        });
-      } else {
-        res.send(data);
+  // Get a contrat by ID
+  async findOne(req, res) {
+    const { id } = req.params;
+    try {
+      const contrat = await prisma.contrat.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!contrat) {
+        return res.status(404).json({ error: 'Contrat non trouvé.' });
       }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error updating contrat with id ${req.params.id}.`,
+      res.status(200).json(contrat);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération du contrat.',
       });
-    });
+    }
+  },
+
+  // Get all published contrats
+  async findAllPublished(req, res) {
+    try {
+      const contrats = await prisma.contrat.findMany({
+        where: { published: true },
+      });
+      res.status(200).json(contrats);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la récupération des contrats publiés.',
+      });
+    }
+  },
+
+  // Update a contrat by ID
+  async update(req, res) {
+    const { id } = req.params;
+    const { name, description, published, begin_date, end_date } = req.body;
+    try {
+      const updatedContrat = await prisma.contrat.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          description,
+          published,
+          begin_date,
+          end_date,
+        },
+      });
+      res.status(200).json(updatedContrat);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la mise à jour du contrat.',
+      });
+    }
+  },
+
+  // Delete a contrat by ID
+  async delete(req, res) {
+    const { id } = req.params;
+    try {
+      await prisma.contrat.delete({
+        where: { id: Number(id) },
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la suppression du contrat.',
+      });
+    }
+  },
+
+  // Delete all contrats
+  async deleteAll(req, res) {
+    try {
+      await prisma.contrat.deleteMany();
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la suppression de tous les contrats.',
+      });
+    }
+  },
 };
 
-//delete a contrat with the specified id in the request
-exports.delete = (req, res) => {
-  Contrat.remove(req.params.id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found contrat with id ${req.params.id}.`,
-        });
-      } else {
-        res.send({ message: 'Contrat was deleted successfully!' });
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Could not delete contrat with id ${req.params.id}.`,
-      });
-    });
-};
-
-//delete all contrats from the database
-exports.deleteAll = (req, res) => {
-  Contrat.removeAll()
-    .then((data) => {
-      res.send({
-        message: `${data.affectedRows} contrats were deleted successfully!`,
-      });
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message:
-          error.message || 'Some error occurred while removing all contrats.',
-      });
-    });
-};
+module.exports = ContratController;

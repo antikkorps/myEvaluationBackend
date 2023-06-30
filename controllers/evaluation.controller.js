@@ -1,141 +1,146 @@
-const Evaluation = require('../models/evaluation.model.js');
+const { PrismaClient } = require('@prisma/client');
 
-//create and save a new evaluation
-exports.create = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
+const prisma = new PrismaClient();
 
-  //create an evaluation
-  const evaluation = new Evaluation({
-    id: req.body.id,
-    name: req.body.name,
-    description: req.body.description,
-    date: req.body.date,
-    type: req.body.type,
-    status: req.body.status,
-    user_id: req.body.user_id,
-    published: req.body.published,
-  });
-
-  //save evaluation in the database
-  Evaluation.create(evaluation, (error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while creating.',
+const EvaluationController = {
+  // Create a new evaluation
+  async create(req, res) {
+    const { id, name, description, date, type, status, user_id, published } =
+      req.body;
+    try {
+      const newEvaluation = await prisma.evaluation.create({
+        data: {
+          id,
+          name,
+          description,
+          date,
+          type,
+          status,
+          user_id,
+          published,
+        },
       });
-    } else {
-      res.send(data);
-    }
-  });
-};
-
-//retrieve all evaluations from the database
-exports.findAll = (req, res) => {
-  Evaluation.getAll()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
+      res.status(201).json(newEvaluation);
+    } catch (error) {
+      console.error(error);
       res.status(500).json({
-        message: error.message || 'Some error occurred while retrieving.',
+        error: "Une erreur est survenue lors de la création de l'évaluation.",
       });
-    });
-};
+    }
+  },
 
-//find a single evaluation with an id
-exports.findOne = (req, res) => {
-  Evaluation.findById(req.params.id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Not found evaluation with id ${req.params.id}.`,
-        });
-      } else {
-        res.send(data);
+  // Get all evaluations
+  async findAll(req, res) {
+    try {
+      const evaluations = await prisma.evaluation.findMany();
+      res.status(200).json(evaluations);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la récupération des évaluations.',
+      });
+    }
+  },
+
+  // Get evaluation by ID
+  async findOne(req, res) {
+    const { id } = req.params;
+    try {
+      const evaluation = await prisma.evaluation.findUnique({
+        where: { id: Number(id) },
+      });
+      if (!evaluation) {
+        return res.status(404).json({ error: 'Évaluation non trouvée.' });
       }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: 'Error retrieving evaluation with id ' + req.params.id,
+      res.status(200).json(evaluation);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération de l'évaluation.",
       });
-    });
-};
+    }
+  },
 
-//find all published evaluations
-exports.findAllPublished = (req, res) => {
-  Evaluation.getAllPublished((error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while retrieving.',
+  // Get all published evaluations
+  async findAllPublished(req, res) {
+    try {
+      const evaluations = await prisma.evaluation.findMany({
+        where: { published: true },
       });
-    } else {
-      res.send(data);
+      res.status(200).json(evaluations);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la récupération des évaluations publiées.',
+      });
     }
-  });
-};
+  },
 
-//update an evaluation by the id in the request
-exports.update = (req, res) => {
-  //validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: 'Content can not be empty!',
-    });
-  }
-
-  Evaluation.updateById(
-    req.params.id,
-    new Evaluation(req.body),
-    (error, data) => {
-      if (error) {
-        if (error.kind === 'not_found') {
-          res.status(404).send({
-            message: `Not found evaluation with id ${req.params.id}.`,
-          });
-        } else {
-          res.status(500).send({
-            message: 'Error updating evaluation with id ' + req.params.id,
-          });
-        }
-      } else {
-        res.send(data);
-      }
+  // Update evaluation by ID
+  async update(req, res) {
+    const { id } = req.params;
+    const { name, description, date, type, status, user_id, published } =
+      req.body;
+    try {
+      const updatedEvaluation = await prisma.evaluation.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          description,
+          date,
+          type,
+          status,
+          user_id,
+          published,
+        },
+      });
+      res.status(200).json(updatedEvaluation);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la mise à jour de l'évaluation.",
+      });
     }
-  );
-};
+  },
 
-//delete an evaluation with the specified id in the request
-exports.delete = (req, res) => {
-  Evaluation.remove(req.params.id, (error, data) => {
-    if (error) {
-      if (error.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found evaluation with id ${req.params.id}.`,
+  // Delete evaluation by ID
+  async delete(req, res) {
+    const { id } = req.params;
+    try {
+      await prisma.evaluation.delete({
+        where: { id: Number(id) },
+      });
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error:
+            "Une erreur est survenue lors de la suppression de l'évaluation.",
         });
-      } else {
-        res.status(500).send({
-          message: 'Could not delete evaluation with id ' + req.params.id,
-        });
-      }
-    } else {
-      res.send({ message: `Evaluation was deleted successfully!` });
     }
-  });
+  },
+
+  // Delete all evaluations
+  async deleteAll(req, res) {
+    try {
+      await prisma.evaluation.deleteMany();
+      res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error:
+            'Une erreur est survenue lors de la suppression de toutes les évaluations.',
+        });
+    }
+  },
 };
 
-//delete all evaluations from the database
-exports.deleteAll = (req, res) => {
-  Evaluation.removeAll((error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: error.message || 'Some error occurred while removing.',
-      });
-    } else {
-      res.send({ message: `All evaluations were deleted successfully!` });
-    }
-  });
-};
+module.exports = EvaluationController;
