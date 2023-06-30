@@ -5,18 +5,13 @@ const prisma = new PrismaClient();
 const EvaluationController = {
   // Create a new evaluation
   async create(req, res) {
-    const { id, name, description, date, type, status, user_id, published } =
-      req.body;
+    const { id, name, description, published } = req.body;
     try {
       const newEvaluation = await prisma.evaluation.create({
         data: {
           id,
           name,
           description,
-          date,
-          type,
-          status,
-          user_id,
           published,
         },
       });
@@ -117,12 +112,10 @@ const EvaluationController = {
       res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error:
-            "Une erreur est survenue lors de la suppression de l'évaluation.",
-        });
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la suppression de l'évaluation.",
+      });
     }
   },
 
@@ -133,12 +126,10 @@ const EvaluationController = {
       res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error:
-            'Une erreur est survenue lors de la suppression de toutes les évaluations.',
-        });
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la suppression de toutes les évaluations.',
+      });
     }
   },
 };

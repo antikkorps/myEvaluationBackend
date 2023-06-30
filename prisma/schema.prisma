@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id       Int      @id @default(autoincrement())
   name     String   @db.VarChar(255)
   firstName String @db.VarChar(255)
@@ -17,21 +17,22 @@ model user {
   fonction String @db.VarChar(255)
 }
 
-model role {
+model Role {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
   slug String @db.VarChar(255)
 }
 
-model evaluation {
+model Evaluation {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
   published   Boolean? @default(false)
+  tags      Tag[]
 }
 
-model contrat {
+model Contrat {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
@@ -40,3 +41,8 @@ model contrat {
   endDate     DateTime @default(now())
 }
 
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String
+  evaluations Evaluation[]
+}

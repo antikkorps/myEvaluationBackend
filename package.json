@@ -24,6 +24,6 @@
     "mysql2": "^3.3.5"
   },
   "devDependencies": {
-    "prisma": "^4.16.1"
+    "prisma": "^4.16.2"
   }
 }
