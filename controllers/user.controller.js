@@ -4,12 +4,14 @@ const prisma = new PrismaClient();
 const UserController = {
   // Create a new user
   async create(req, res) {
-    const { name, firstName, email, password, role, fonction } = req.body;
+    const { name, firstName, username, email, password, role, fonction } =
+      req.body;
     try {
       const newUser = await prisma.user.create({
         data: {
           name,
           firstName,
+          username,
           email,
           password,
           role,
