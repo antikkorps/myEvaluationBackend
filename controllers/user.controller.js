@@ -115,6 +115,36 @@ const UserController = {
       });
     }
   },
+
+  // login
+  async login(req, res) {
+    const { username, password } = req.body;
+    try {
+      const user = await prisma.user.findUnique({
+        where: { username },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: 'Utilisateur non trouvé.' });
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Mot de passe incorrect.' });
+      }
+
+      // Authentification réussie
+      // Vous pouvez générer un jeton d'authentification ou effectuer d'autres actions ici
+
+      res.status(200).json({ message: 'Authentification réussie.' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: 'An error occurred while logging in.',
+      });
+    }
+  },
 };
 
 module.exports = UserController;
