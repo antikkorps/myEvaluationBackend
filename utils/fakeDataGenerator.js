@@ -2,14 +2,18 @@ const { faker } = require('@faker-js/faker');
 
 function generateFakeUser() {
   const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
+  const Name = faker.person.lastName();
   const email = faker.internet.email();
+  const password = faker.internet.password();
+  const role = faker.person.jobTitle();
+  const fonction = faker.person.jobDescriptor();
   // ...
 
   return {
     firstName,
-    lastName,
+    Name,
     email,
+    password,
     // ...
   };
 }
@@ -17,6 +21,14 @@ function generateFakeUser() {
 function generateFakeRole() {
   const name = faker.person.jobTitle();
   const description = faker.hacker.phrase();
+  const slug = faker.lorem.slug();
+  //...
+  return {
+    name,
+    description,
+    slug,
+    //...
+  };
 }
 
 module.exports = {
