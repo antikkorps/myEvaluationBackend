@@ -73,6 +73,10 @@ const UserController = {
         data: {
           name,
           email,
+          firstName,
+          username,
+          role,
+          fonction,
         },
       });
       res.status(200).json(updatedUser);
