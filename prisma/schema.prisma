@@ -55,10 +55,12 @@ model Evaluation_Item {
   methode_item        Methode_Item    @relation(fields: [methode_item_id], references: [methode_item_id])
   }
 
-model ClientEntreprise {
+model Client {
   client_id          Int              @id @default(autoincrement())
-  nom                String
-  adresse            String?
+  name                String
+  address            String?
+  city               String?
+  zipcode            String?
   contrats           Contrat[]
 }
 
@@ -67,7 +69,7 @@ model Contrat {
   contrat_id          Int            @id @default(autoincrement())
   client_id           Int
   theme          String
-  client              ClientEntreprise @relation(fields: [client_id], references: [client_id])
+  client              Client @relation(fields: [client_id], references: [client_id])
   contrat_methodes    Contrat_Methode[]
   evaluations         Evaluation[]
 }
@@ -82,7 +84,7 @@ model Contrat_Methode {
 
 model Tag {
   tag_id             Int              @id @default(autoincrement())
-  nom                String
+  name                String
   description        String?
   methode_tags       Methode_Tag[]
   }

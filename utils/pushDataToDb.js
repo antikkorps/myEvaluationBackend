@@ -4,6 +4,7 @@ const {
   generateFakeRole,
   generateFakeUser,
   generateFakeTag,
+  generateFakeClient,
 } = require('./fakeDataGenerator');
 const prisma = new PrismaClient();
 
@@ -20,6 +21,7 @@ async function createFakeUsers(numUsers) {
           email: fakeUser.email,
           password: fakeUser.password,
           fonction: fakeUser.fonction,
+          role_id: 2,
           // Autres champs de l'utilisateur
         },
       });
@@ -85,3 +87,30 @@ async function createFakeTags(numTags) {
 
 // création de 10 tags fictifs
 createFakeTags(10);
+
+async function createFakeClients(numClients) {
+  try {
+    for (let i = 0; i < numClients; i++) {
+      const fakeClient = generateFakeClient();
+
+      await prisma.client.create({
+        data: {
+          name: fakeClient.name,
+          address: fakeClient.address,
+          city: fakeClient.city,
+          zipcode: fakeClient.zipcode,
+          // Autres champs du client
+        },
+      });
+    }
+
+    console.log(`${numClients} fake clients created.`);
+  } catch (error) {
+    console.error('Error creating fake clients:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// création de 10 clients fictifs
+createFakeClients(10);

@@ -6,7 +6,7 @@ function generateFakeUser() {
   const email = faker.internet.email();
   const password = faker.internet.password();
   const username = faker.internet.userName();
-  const role = faker.person.jobTitle();
+  const role_id = faker.number.int();
   const fonction = faker.person.jobDescriptor();
   // ...
 
@@ -17,6 +17,7 @@ function generateFakeUser() {
     password,
     username,
     fonction,
+    role_id,
     // ...
   };
 }
@@ -43,9 +44,25 @@ function generateFakeTag() {
   };
 }
 
+function generateFakeClient() {
+  const name = faker.company.name();
+  const address = faker.location.streetAddress();
+  const city = faker.location.city();
+  const zipcode = faker.location.zipCode();
+  //...
+  return {
+    name,
+    address,
+    city,
+    zipcode,
+    //...
+  };
+}
+
 module.exports = {
   generateFakeUser,
   generateFakeRole,
   generateFakeTag,
+  generateFakeClient,
   // ...
 };
