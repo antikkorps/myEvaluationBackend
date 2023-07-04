@@ -9,8 +9,8 @@ ALTER TABLE `User` DROP COLUMN `role`;
 
 -- CreateTable
 CREATE TABLE `_RoleToUser` (
-    `A` INTEGER NOT NULL,
-    `B` INTEGER NOT NULL,
+    `A` INTEGER NOT NULL DEFAULT 0,
+    `B` INTEGER NOT NULL DEFAULT 0,
 
     UNIQUE INDEX `_RoleToUser_AB_unique`(`A`, `B`),
     INDEX `_RoleToUser_B_index`(`B`)
