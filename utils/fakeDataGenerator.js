@@ -59,10 +59,41 @@ function generateFakeClient() {
   };
 }
 
+function generateFakeContrat() {
+  const client_id = Math.floor(Math.random() * 1000);
+  const theme = faker.lorem.word();
+  //...
+  return {
+    client_id,
+    theme,
+    //...
+  };
+}
+
+function generateFakeEvaluation() {
+  const formateur_id = Math.floor(Math.random() * 1000);
+  const participant_id = Math.floor(Math.random() * 1000);
+  const note_totale = Math.floor(Math.random() * 11);
+  const commentaire = faker.lorem.word();
+  const date = faker.date.future();
+  const contrat_id = faker.number.int();
+  //...
+  return {
+    formateur_id,
+    participant_id,
+    note_totale,
+    commentaire,
+    date,
+    contrat_id,
+    //...
+  };
+}
 module.exports = {
   generateFakeUser,
   generateFakeRole,
   generateFakeTag,
   generateFakeClient,
+  generateFakeContrat,
+  generateFakeEvaluation,
   // ...
 };

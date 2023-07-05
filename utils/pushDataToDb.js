@@ -5,6 +5,8 @@ const {
   generateFakeUser,
   generateFakeTag,
   generateFakeClient,
+  generateFakeContrat,
+  generateFakeEvaluation,
 } = require('./fakeDataGenerator');
 const prisma = new PrismaClient();
 
@@ -114,3 +116,56 @@ async function createFakeClients(numClients) {
 
 // création de 10 clients fictifs
 createFakeClients(10);
+
+async function createFakeContrats(numContrats) {
+  try {
+    for (let i = 0; i < numContrats; i++) {
+      const fakeContrat = generateFakeContrat();
+
+      await prisma.contrat.create({
+        data: {
+          client_id: fakeContrat.client_id,
+          theme: fakeContrat.theme,
+          // Autres champs du contrat
+        },
+      });
+    }
+    console.log(`${numContrats} fake contrats created.`);
+  } catch (error) {
+    console.error('Error creating fake contrats:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// création de 10 contrats fictifs
+createFakeContrats(10);
+
+async function createFakeEvaluations(numEvaluations) {
+  try {
+    for (let i = 0; i < numEvaluations; i++) {
+      const fakeEvaluation = generateFakeEvaluation();
+
+      await prisma.evaluation.create({
+        data: {
+          formateur_id: fakeEvaluation.formateur_id,
+          participant_id: fakeEvaluation.participant_id,
+          note_totale: fakeEvaluation.note_totale,
+          commentaire: fakeEvaluation.commentaire,
+          date: fakeEvaluation.date,
+          contrat_id: fakeEvaluation.contrat_id,
+          // Autres champs de l'évaluation
+        },
+      });
+    }
+
+    console.log(`${numEvaluations} fake evaluations created.`);
+  } catch (error) {
+    console.error('Error creating fake evaluations:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// création de 10 évaluations fictives
+createFakeEvaluations(10);
