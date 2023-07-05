@@ -60,7 +60,7 @@ function generateFakeClient() {
 }
 
 function generateFakeContrat() {
-  const client_id = Math.floor(Math.random() * 1000);
+  const client_id = Math.floor(Math.random() * 11);
   const theme = faker.lorem.word();
   //...
   return {
@@ -71,12 +71,12 @@ function generateFakeContrat() {
 }
 
 function generateFakeEvaluation() {
-  const formateur_id = Math.floor(Math.random() * 1000);
-  const participant_id = Math.floor(Math.random() * 1000);
+  const formateur_id = Math.floor(Math.random() * 20);
+  const participant_id = Math.floor(Math.random() * 20);
   const note_totale = Math.floor(Math.random() * 11);
   const commentaire = faker.lorem.word();
   const date = faker.date.future();
-  const contrat_id = faker.number.int();
+  const contrat_id = Math.floor(Math.random() * 20);
   //...
   return {
     formateur_id,

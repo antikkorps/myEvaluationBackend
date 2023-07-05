@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  user_id       Int      @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String   @db.VarChar(255)
   firstName String @db.VarChar(255)
   username String   @db.VarChar(255)
@@ -17,14 +17,14 @@ model User {
   fonction String @db.VarChar(255)
   role_id Int
   
-  role Role @relation(fields: [role_id], references: [role_id])
+  role Role @relation(fields: [role_id], references: [id])
   evaluations_formateur  Evaluation[] @relation("formateur")
   evaluations_participant Evaluation[] @relation("participant")
   
 }
 
 model Role {
-  role_id     Int      @id @default(autoincrement())
+  id     Int      @id @default(autoincrement())
   name        String   @db.VarChar(255)
   description String?  @db.VarChar(255)
   slug        String   @db.VarChar(255)
@@ -32,31 +32,31 @@ model Role {
 }
 
 model Evaluation {
-  evaluation_id       Int            @id @default(autoincrement())
+  id       Int            @id @default(autoincrement())
   formateur_id        Int
   participant_id      Int
   note_totale         Int
   commentaire         String?
   date                DateTime
   contrat_id          Int
-  formateur           User           @relation("formateur", fields: [formateur_id], references: [user_id])
-  participant         User           @relation("participant", fields: [participant_id], references: [user_id])
-  contrat             Contrat        @relation(fields: [contrat_id], references: [contrat_id])
+  formateur           User           @relation("formateur", fields: [formateur_id], references: [id])
+  participant         User           @relation("participant", fields: [participant_id], references: [id])
+  contrat             Contrat        @relation(fields: [contrat_id], references: [id])
   evaluation_items    Evaluation_Item[]
   }
 
 model Evaluation_Item {
-  evaluation_item_id  Int              @id @default(autoincrement())
+  id  Int              @id @default(autoincrement())
   evaluation_id       Int
   methode_item_id     Int
   note                Int
   commentaire         String?
-  evaluation          Evaluation      @relation(fields: [evaluation_id], references: [evaluation_id])
-  methode_item        Methode_Item    @relation(fields: [methode_item_id], references: [methode_item_id])
+  evaluation          Evaluation      @relation(fields: [evaluation_id], references: [id])
+  methode_item        Methode_Item    @relation(fields: [methode_item_id], references: [id])
   }
 
 model Client {
-  client_id          Int              @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   name                String
   address            String?
   city               String?
@@ -66,39 +66,39 @@ model Client {
 
 
 model Contrat {
-  contrat_id          Int            @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   client_id           Int
   theme          String
-  client              Client @relation(fields: [client_id], references: [client_id])
+  client              Client @relation(fields: [client_id], references: [id])
   contrat_methodes    Contrat_Methode[]
   evaluations         Evaluation[]
 }
 
 model Contrat_Methode {
-  contrat_methode_id  Int            @id @default(autoincrement())
+  id  Int            @id @default(autoincrement())
   contrat_id          Int
-  methode_id           Int
-  contrat             Contrat        @relation(fields: [contrat_id], references: [contrat_id])
-  methode              Methode         @relation(fields: [methode_id], references: [methode_id])
+  methode_id          Int
+  contrat             Contrat        @relation(fields: [contrat_id], references: [id])
+  methode              Methode         @relation(fields: [methode_id], references: [id])
 }
 
 model Tag {
-  tag_id             Int              @id @default(autoincrement())
+  id             Int              @id @default(autoincrement())
   name                String
   description        String?
   methode_tags       Methode_Tag[]
   }
 
   model Methode_Tag {
-  methode_tag_id     Int              @id @default(autoincrement())
+  id     Int              @id @default(autoincrement())
   methode_id         Int
   tag_id             Int
-  methode            Methode         @relation(fields: [methode_id], references: [methode_id])
-  tag                Tag             @relation(fields: [tag_id], references: [tag_id])
+  methode            Methode         @relation(fields: [methode_id], references: [id])
+  tag                Tag             @relation(fields: [tag_id], references: [id])
 }
 
 model Methode {
-  methode_id   Int            @id @default(autoincrement())
+  id   Int            @id @default(autoincrement())
   name          String
   description  String?
   methode_items Methode_Item[]
@@ -107,23 +107,23 @@ model Methode {
 }
 
 model Item {
-  item_id     Int            @id @default(autoincrement())
+  id     Int            @id @default(autoincrement())
   nom         String
   description String?
   methode_items Methode_Item[]
 }
 
 model Methode_Item {
-  methode_item_id Int         @id @default(autoincrement())
+  id Int         @id @default(autoincrement())
   methode_id      Int
   item_id         Int
-  methode        Methode    @relation(fields: [methode_id], references: [methode_id])
-  item            Item        @relation(fields: [item_id], references: [item_id])
+  methode        Methode    @relation(fields: [methode_id], references: [id])
+  item            Item        @relation(fields: [item_id], references: [id])
   evaluation_items Evaluation_Item[]
 }
 
 model Item_Note {
-  item_note_id           Int             @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
   evaluation_item_id     Int
   evaluation_id          Int
   note                   Int
