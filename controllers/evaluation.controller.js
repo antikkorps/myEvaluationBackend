@@ -5,14 +5,23 @@ const prisma = new PrismaClient();
 const EvaluationController = {
   // Create a new evaluation
   async create(req, res) {
-    const { id, name, description, published } = req.body;
+    const {
+      evaluation_id,
+      formateur_id,
+      note_totale,
+      commentaire,
+      date,
+      contrat_id,
+    } = req.body;
     try {
       const newEvaluation = await prisma.evaluation.create({
         data: {
-          id,
-          name,
-          description,
-          published,
+          evaluation_id,
+          formateur_id,
+          note_totale,
+          commentaire,
+          date,
+          contrat_id,
         },
       });
       res.status(201).json(newEvaluation);
