@@ -66,30 +66,6 @@ async function createFakeRoles(numRoles) {
 // création de 10 rôles fictifs
 createFakeRoles(10);
 
-async function createFakeTags(numTags) {
-  try {
-    for (let i = 0; i < numTags; i++) {
-      const fakeTag = generateFakeTag();
-
-      await prisma.tag.create({
-        data: {
-          name: fakeTag.name,
-          // Autres champs du tag
-        },
-      });
-    }
-
-    console.log(`${numTags} fake tags created.`);
-  } catch (error) {
-    console.error('Error creating fake tags:', error);
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-// création de 10 tags fictifs
-createFakeTags(10);
-
 async function createFakeClients(numClients) {
   try {
     for (let i = 0; i < numClients; i++) {
@@ -124,8 +100,14 @@ async function createFakeContrats(numContrats) {
 
       await prisma.contrat.create({
         data: {
-          client_id: fakeContrat.client_id,
+          name: fakeContrat.name,
+          description: fakeContrat.description,
+          published: fakeContrat.published,
+          begin_date: fakeContrat.begin_date,
+          end_date: fakeContrat.end_date,
           theme: fakeContrat.theme,
+          client_id: fakeContrat.client_id,
+
           // Autres champs du contrat
         },
       });
@@ -141,6 +123,30 @@ async function createFakeContrats(numContrats) {
 // création de 10 contrats fictifs
 createFakeContrats(10);
 
+async function createFakeTags(numTags) {
+  try {
+    for (let i = 0; i < numTags; i++) {
+      const fakeTag = generateFakeTag();
+
+      await prisma.tag.create({
+        data: {
+          name: fakeTag.name,
+          // Autres champs du tag
+        },
+      });
+    }
+
+    console.log(`${numTags} fake tags created.`);
+  } catch (error) {
+    console.error('Error creating fake tags:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// création de 10 tags fictifs
+createFakeTags(10);
+
 async function createFakeEvaluations(numEvaluations) {
   try {
     for (let i = 0; i < numEvaluations; i++) {
@@ -150,7 +156,7 @@ async function createFakeEvaluations(numEvaluations) {
         data: {
           formateur_id: fakeEvaluation.formateur_id,
           participant_id: fakeEvaluation.participant_id,
-          note_totale: fakeEvaluation.note_totale,
+          note_globale: fakeEvaluation.note_globale,
           commentaire: fakeEvaluation.commentaire,
           date: fakeEvaluation.date,
           contrat_id: fakeEvaluation.contrat_id,

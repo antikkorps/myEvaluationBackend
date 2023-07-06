@@ -60,12 +60,23 @@ function generateFakeClient() {
 }
 
 function generateFakeContrat() {
-  const client_id = Math.floor(Math.random() * 11);
+  const name = faker.lorem.word();
+  const description = faker.lorem.sentence();
+  const published = faker.datatype.boolean();
+  const begin_date = faker.date.future();
+  const end_date = faker.date.future();
   const theme = faker.lorem.word();
+  const client_id = Math.floor(Math.random() * 11);
+
   //...
   return {
-    client_id,
+    name,
+    description,
+    published,
+    begin_date,
+    end_date,
     theme,
+    client_id,
     //...
   };
 }
@@ -73,7 +84,7 @@ function generateFakeContrat() {
 function generateFakeEvaluation() {
   const formateur_id = Math.floor(Math.random() * 20);
   const participant_id = Math.floor(Math.random() * 20);
-  const note_totale = Math.floor(Math.random() * 11);
+  const note_globale = Math.floor(Math.random() * 11);
   const commentaire = faker.lorem.word();
   const date = faker.date.future();
   const contrat_id = Math.floor(Math.random() * 20);
@@ -81,7 +92,7 @@ function generateFakeEvaluation() {
   return {
     formateur_id,
     participant_id,
-    note_totale,
+    note_globale,
     commentaire,
     date,
     contrat_id,

@@ -86,19 +86,24 @@ const EvaluationController = {
   // Update evaluation by ID
   async update(req, res) {
     const { id } = req.params;
-    const { name, description, date, type, status, user_id, published } =
-      req.body;
+    const {
+      formateur_id,
+      participant_id,
+      note_globale,
+      commentaire,
+      date,
+      contrat_id,
+    } = req.body;
     try {
       const updatedEvaluation = await prisma.evaluation.update({
         where: { id: Number(id) },
         data: {
-          name,
-          description,
+          formateur_id,
+          participant_id,
+          note_globale,
+          commentaire,
           date,
-          type,
-          status,
-          user_id,
-          published,
+          contrat_id,
         },
       });
       res.status(200).json(updatedEvaluation);

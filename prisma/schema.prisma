@@ -35,7 +35,7 @@ model Evaluation {
   id       Int            @id @default(autoincrement())
   formateur_id        Int
   participant_id      Int
-  note_totale         Int
+  note_globale        Int @default(0)
   commentaire         String?
   date                DateTime
   contrat_id          Int
@@ -66,9 +66,14 @@ model Client {
 
 
 model Contrat {
-  id          Int            @id @default(autoincrement())
-  client_id           Int
-  theme          String
+  id                Int            @id @default(autoincrement())
+  name              String
+  description       String
+  published         Boolean        @default(false)
+  begin_date        DateTime @default(now())
+  end_date          DateTime @default (now())
+  theme             String
+  client_id         Int
   client              Client @relation(fields: [client_id], references: [id])
   contrat_methodes    Contrat_Methode[]
   evaluations         Evaluation[]
@@ -79,7 +84,7 @@ model Contrat_Methode {
   contrat_id          Int
   methode_id          Int
   contrat             Contrat        @relation(fields: [contrat_id], references: [id])
-  methode              Methode         @relation(fields: [methode_id], references: [id])
+  methode             Methode         @relation(fields: [methode_id], references: [id])
 }
 
 model Tag {

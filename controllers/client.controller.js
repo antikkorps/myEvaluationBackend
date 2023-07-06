@@ -16,11 +16,9 @@ const ClientController = {
       res.status(201).json(newClient);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: 'Une erreur est survenue lors de la création du client.',
-        });
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la création du client.',
+      });
     }
   },
 
@@ -31,11 +29,9 @@ const ClientController = {
       res.status(200).json(clients);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: 'Une erreur est survenue lors de la récupération des clients.',
-        });
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération des clients.',
+      });
     }
   },
 
@@ -52,11 +48,9 @@ const ClientController = {
       res.status(200).json(client);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: 'Une erreur est survenue lors de la récupération du client.',
-        });
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la récupération du client.',
+      });
     }
   },
 
@@ -66,7 +60,7 @@ const ClientController = {
     const { name } = req.body;
     try {
       const updatedClient = await prisma.client.update({
-        where: { id: Number(id) },
+        where: { id: parseInt(id, 10) },
         data: {
           name,
         },
@@ -74,11 +68,9 @@ const ClientController = {
       res.status(200).json(updatedClient);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: 'Une erreur est survenue lors de la mise à jour du client.',
-        });
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la mise à jour du client.',
+      });
     }
   },
 
@@ -92,11 +84,9 @@ const ClientController = {
       res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error: 'Une erreur est survenue lors de la suppression du client.',
-        });
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la suppression du client.',
+      });
     }
   },
 
@@ -107,12 +97,10 @@ const ClientController = {
       res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          error:
-            'Une erreur est survenue lors de la suppression de tous les clients.',
-        });
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la suppression de tous les clients.',
+      });
     }
   },
 };

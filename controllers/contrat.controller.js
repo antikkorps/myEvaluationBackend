@@ -77,7 +77,8 @@ const ContratController = {
   // Update a contrat by ID
   async update(req, res) {
     const { id } = req.params;
-    const { name, description, published, begin_date, end_date } = req.body;
+    const { name, description, published, begin_date, end_date, theme } =
+      req.body;
     try {
       const updatedContrat = await prisma.contrat.update({
         where: { id: Number(id) },
@@ -87,6 +88,7 @@ const ContratController = {
           published,
           begin_date,
           end_date,
+          theme,
         },
       });
       res.status(200).json(updatedContrat);
