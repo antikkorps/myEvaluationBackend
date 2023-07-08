@@ -25,10 +25,11 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to my application.' });
 });
 
-require('./routes/evaluation.routes')(app);
-require('./routes/contrat.routes')(app);
-require('./routes/role.routes')(app);
 require('./routes/client.routes')(app);
+require('./routes/contrat.routes')(app);
+require('./routes/evaluation.routes')(app);
+require('./routes/methode.routes')(app);
+require('./routes/role.routes')(app);
 require('./routes/user.routes')(app);
 
 //set port, listen for requests

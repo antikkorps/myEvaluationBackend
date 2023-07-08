@@ -66,8 +66,10 @@ const UserController = {
   // Update a user by ID
   async update(req, res) {
     const { id } = req.params;
-    const { name, email, firstName, username, role, fonction } = req.body;
+    const { name, email, firstName, username, password, role, fonction } =
+      req.body;
     try {
+      const hashedPassword = await bcrypt.hash(password, 10);
       const updatedUser = await prisma.user.update({
         where: { id: parseInt(id, 10) },
         data: {
@@ -75,6 +77,7 @@ const UserController = {
           email,
           firstName,
           username,
+          password: hashedPassword,
           role,
           fonction,
         },
