@@ -104,10 +104,7 @@ const ContratController = {
   async delete(req, res) {
     const { id } = req.params;
     try {
-      await prisma.contrat.delete({
-        where: { id: Number(id) },
-      });
-      res.sendStatus(204);
+      await pmodule.exportsdStatus(204);
     } catch (error) {
       console.error(error);
       res.status(500).json({
