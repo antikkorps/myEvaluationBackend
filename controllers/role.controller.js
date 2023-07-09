@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 const RoleController = {
   // Créer un nouvel utilisateur
   async create(req, res) {
-    const { id, name, slug, description } = req.body;
+    const { id } = req.params;
+    const { name, slug, description } = req.body;
     try {
       const newUser = await prisma.role.create({
         data: {

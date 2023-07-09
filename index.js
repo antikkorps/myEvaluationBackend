@@ -30,6 +30,7 @@ require('./routes/contrat.routes')(app);
 require('./routes/evaluation.routes')(app);
 require('./routes/methode.routes')(app);
 require('./routes/role.routes')(app);
+require('./routes/tag.routes')(app);
 require('./routes/user.routes')(app);
 
 //set port, listen for requests
