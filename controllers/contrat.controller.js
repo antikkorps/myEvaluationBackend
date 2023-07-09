@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 const ContratController = {
   // Create a new contrat
   async create(req, res) {
-    const { id, name, description, published, begin_date, end_date } = req.body;
+    const { id, name, description, published, begin_date, end_date, theme } =
+      req.body;
     try {
       const newContrat = await prisma.contrat.create({
         data: {
@@ -15,6 +16,7 @@ const ContratController = {
           published,
           begin_date,
           end_date,
+          theme,
         },
       });
       res.status(201).json(newContrat);
@@ -104,7 +106,10 @@ const ContratController = {
   async delete(req, res) {
     const { id } = req.params;
     try {
-      await pmodule.exportsdStatus(204);
+      await prisma.contrat.delete({
+        where: { id: Number(id) },
+      });
+      res.sendStatus(204);
     } catch (error) {
       console.error(error);
       res.status(500).json({

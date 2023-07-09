@@ -11,6 +11,9 @@ const ClientController = {
         data: {
           id,
           name,
+          address,
+          city,
+          zipcode,
         },
       });
       res.status(201).json(newClient);
@@ -57,12 +60,15 @@ const ClientController = {
   // Mettre à jour un client par son ID
   async update(req, res) {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, address, city, zipcode } = req.body;
     try {
       const updatedClient = await prisma.client.update({
         where: { id: parseInt(id, 10) },
         data: {
           name,
+          address,
+          city,
+          zipcode,
         },
       });
       res.status(200).json(updatedClient);
