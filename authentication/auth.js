@@ -1,23 +1,31 @@
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Fonction pour générer un token JWT
+// generate a JWT token
 const generateToken = (payload) => {
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '48h' });
   return token;
 };
 
-// Fonction pour vérifier un token JWT et récupérer les informations de l'utilisateur
+// Verify a JWT Token and get the information about the user
 const verifyToken = (token) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return decoded;
   } catch (error) {
-    // En cas d'erreur, par exemple si le token est invalide ou a expiré
+    // If the token is invalid or expired
     return null;
   }
+};
+
+//compare password
+const comparePassword = (plainPassword, passwordHash) => {
+  const compared = bcrypt.compareSync(plainPassword, passwordHash);
+  return compared;
 };
 
 module.exports = {
   generateToken,
   verifyToken,
+  comparePassword,
 };

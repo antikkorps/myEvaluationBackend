@@ -1,26 +1,39 @@
 const { generateToken } = require('../authentication/auth');
+const bcrypt = require('bcrypt');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 module.exports = (app) => {
-  const evaluations = require('../controllers/evaluation.controller.js');
   const router = require('express').Router();
 
-  // Route de connexion pour obtenir le token JWT
+  // Login route to get the JWT Token
   router.post('/', (req, res) => {
     const { username, password } = req.body;
-
-    // Vérifiez les informations d'identification de l'utilisateur, par exemple, en les comparant avec la base de données
-    if (username === 'example' && password === 'password') {
-      // Générez un token JWT avec les informations de l'utilisateur
-      const token = generateToken({ username });
-
-      // Renvoyez le token JWT dans la réponse
-      res.json({ token });
-    } else {
-      // Si les informations d'identification sont incorrectes, renvoyez une réponse d'erreur
-      res
-        .status(401)
-        .json({ message: "Informations d'identification invalides" });
+    //check empty fields
+    if (!username || !password) {
+      res.status(400).json({ message: 'Veuillez remplir tous les champs' });
     }
+
+    // Check if the user exists in the database
+    const user = prisma.user.findUnique({ where: { username } });
+    if (!user) {
+      res
+        .status(400)
+        .json({ message: 'Utilisateur ou Mot de passe incorrect' });
+    }
+
+    // Check if the password is correct
+    const hashedPassword = bcrypt.hash(password, 10);
+    const validPassword = bcrypt.compare(password, hashedPassword.toString());
+    if (!validPassword) {
+      res
+        .status(400)
+        .json({ message: 'Utilisateur ou Mot de passe incorrect' });
+    }
+    //Generate a JWT Token
+    const token = generateToken({ username });
+    //send the token in the response
+    res.json({ token, username });
   });
 
   // Utilisez le routeur dans votre application Express

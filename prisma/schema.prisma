@@ -15,7 +15,7 @@ model User {
   email    String   @db.VarChar(255)
   password String   @db.VarChar(255)
   fonction String @db.VarChar(255)
-  role_id Int
+  role_id Int 
   
   role Role @relation(fields: [role_id], references: [id])
   evaluations_formateur  Evaluation[] @relation("formateur")

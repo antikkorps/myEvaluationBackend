@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const { PrismaClient } = require('@prisma/client');
 const { verifyToken } = require('./authentication/auth');
@@ -26,34 +28,39 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to my application.' });
 });
 
+// Utility function to decode the JWT token and get the username
+function getUsernameFromToken(token) {
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  return decodedToken.username;
+}
+
 // Middleware to verify the JWT Token and add the user information to the request object
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).json({ message: 'No Token found' });
+function authMiddleware(req, res, next) {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const username = getUsernameFromToken(token);
+    req.auth = {
+      userId: username,
+    };
+    next();
+  } catch (error) {
+    res.status(401).json({ error });
   }
-
-  const decoded = verifyToken(token);
-  console.log(decoded);
-
-  if (!decoded) {
-    return res.status(401).json({ message: 'invalid or expired Token' });
-  }
-
-  // Add the user information to the request object
-  req.user = decoded;
-
-  next();
-};
+}
 
 // Use Example for the authMiddleware
 app.get('/api/protected', authMiddleware, (req, res) => {
-  // Use req.user to get the information about the user
-  res.json({
-    message: 'Route protected, user is authenticated',
-    user: req.user,
-  });
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const username = getUsernameFromToken(token);
+
+    res.json({
+      message: 'Route protected, user is authenticated',
+      user: username,
+    });
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
 });
 
 // Route to connect the user and get the JWT Token
