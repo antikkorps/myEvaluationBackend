@@ -28,7 +28,14 @@ const RoleController = {
   // Récupérer tous les utilisateurs
   async findAll(req, res) {
     try {
-      const roles = await prisma.role.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const roles = await prisma.role.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(roles);
     } catch (error) {
       console.error(error);

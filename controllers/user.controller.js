@@ -32,7 +32,14 @@ const UserController = {
   // Find all users
   async findAll(req, res) {
     try {
-      const users = await prisma.user.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const users = await prisma.user.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(users);
     } catch (error) {
       console.error(error);

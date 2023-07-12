@@ -36,7 +36,14 @@ const EvaluationController = {
   // Get all evaluations
   async findAll(req, res) {
     try {
-      const evaluations = await prisma.evaluation.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const evaluations = await prisma.evaluation.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(evaluations);
     } catch (error) {
       console.error(error);
@@ -70,8 +77,14 @@ const EvaluationController = {
   // Get all published evaluations
   async findAllPublished(req, res) {
     try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
       const evaluations = await prisma.evaluation.findMany({
         where: { published: true },
+        take: limit,
+        skip: offset,
       });
       res.status(200).json(evaluations);
     } catch (error) {

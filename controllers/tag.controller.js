@@ -25,7 +25,14 @@ const TagController = {
   // Get all tags
   async findAll(req, res) {
     try {
-      const tags = await prisma.tag.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const tags = await prisma.tag.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(tags);
     } catch (error) {
       console.error(error);

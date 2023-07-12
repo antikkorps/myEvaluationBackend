@@ -31,7 +31,14 @@ const ContratController = {
   // Get all contrats
   async findAll(req, res) {
     try {
-      const contrats = await prisma.contrat.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const contrats = await prisma.contrat.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(contrats);
     } catch (error) {
       console.error(error);
@@ -63,8 +70,14 @@ const ContratController = {
   // Get all published contrats
   async findAllPublished(req, res) {
     try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
       const contrats = await prisma.contrat.findMany({
         where: { published: true },
+        take: limit,
+        skip: offset,
       });
       res.status(200).json(contrats);
     } catch (error) {

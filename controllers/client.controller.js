@@ -28,7 +28,14 @@ const ClientController = {
   // Récupérer tous les clients
   async findAll(req, res) {
     try {
-      const clients = await prisma.client.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const clients = await prisma.client.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(clients);
     } catch (error) {
       console.error(error);

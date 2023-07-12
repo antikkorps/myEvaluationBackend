@@ -25,7 +25,14 @@ const MethodeController = {
   // Récupérer toutes les méthodes
   async findAll(req, res) {
     try {
-      const methodes = await prisma.methode.findMany();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 20;
+      const offset = (page - 1) * limit;
+
+      const methodes = await prisma.methode.findMany({
+        take: limit,
+        skip: offset,
+      });
       res.status(200).json(methodes);
     } catch (error) {
       console.error(error);
