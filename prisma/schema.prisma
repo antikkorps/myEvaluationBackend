@@ -66,10 +66,10 @@ model Client {
 
 
 model Contrat {
-  id                Int            @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   name              String
   description       String
-  published         Boolean        @default(false)
+  published         Boolean  @default(false)
   begin_date        DateTime @default(now())
   end_date          DateTime @default (now())
   theme             String

@@ -15,7 +15,7 @@
   "author": "Franck Vienot",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^4.16.1",
+    "@prisma/client": "^5.0.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "prisma": "^4.16.2"
+    "prisma": "^5.0.0"
   }
 }

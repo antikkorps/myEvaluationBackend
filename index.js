@@ -15,7 +15,7 @@ const corsOptions = {
   origin: process.env.CORS_ORIGIN,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 //parse requests of content-type - application/json
 app.use(express.json());
