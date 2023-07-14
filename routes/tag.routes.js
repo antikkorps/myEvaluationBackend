@@ -13,6 +13,7 @@ module.exports = (app) => {
 
   //update a tag with id
   router.put('/:id', tags.update);
+  router.patch('/:id', tags.update);
 
   //delete a tag with id
   router.delete('/:id', tags.delete);

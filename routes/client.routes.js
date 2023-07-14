@@ -13,6 +13,7 @@ module.exports = (app) => {
 
   //update a client with id
   router.put('/:id', clients.update);
+  router.patch('/:id', clients.update);
 
   //delete a client with id
   router.delete('/:id', clients.delete);

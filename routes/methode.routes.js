@@ -13,6 +13,7 @@ module.exports = (app) => {
 
   //update a methode with id
   router.put('/:id', methodes.update);
+  router.patch('/:id', methodes.update);
 
   //delete a methode with id
   router.delete('/:id', methodes.delete);

@@ -16,6 +16,7 @@ module.exports = (app) => {
 
   //update a contrat with id
   router.put('/:id', contrat.update);
+  router.patch('/:id', contrat.update);
 
   //delete a contrat with id
   router.delete('/:id', contrat.delete);

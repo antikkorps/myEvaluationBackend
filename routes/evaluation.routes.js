@@ -16,6 +16,7 @@ module.exports = (app) => {
 
   //update a evaluation with id
   router.put('/:id', evaluations.update);
+  router.patch('/:id', evaluations.update);
 
   //delete a evaluation with id
   router.delete('/:id', evaluations.delete);

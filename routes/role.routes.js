@@ -13,6 +13,7 @@ module.exports = (app) => {
 
   //update a role with id
   router.put('/:id', roles.update);
+  router.patch('/:id', roles.update);
 
   //delete a role with id
   router.delete('/:id', roles.delete);
