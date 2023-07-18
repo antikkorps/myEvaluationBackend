@@ -37,5 +37,5 @@ module.exports = (app) => {
   });
 
   // Utilisez le routeur dans votre application Express
-  app.use('/api/login', router);
+  app.use('/api/v1/login', router);
 };

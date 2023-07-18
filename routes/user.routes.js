@@ -21,5 +21,8 @@ module.exports = (app) => {
   //delete all roles
   router.delete('/', users.deleteAll);
 
+  //login
+  router.post('/login', users.login);
+
   app.use('/api/v1/users', router);
 };
