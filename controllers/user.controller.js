@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const UserController = {
   // Create a new user
@@ -130,28 +132,52 @@ const UserController = {
     }
   },
 
-  // login
+  // Login a user
   async login(req, res) {
     const { username, password } = req.body;
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: { username },
       });
 
       if (!user) {
-        return res.status(404).json({ error: 'Utilisateur non trouvé.' });
+        return res.status(404).json({ error: 'User not found.' });
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
-        return res.status(401).json({ error: 'Mot de passe incorrect.' });
+        return res.status(401).json({ error: 'Incorrect password.' });
       }
 
-      // Authentification réussie
-      // Vous pouvez générer un jeton d'authentification ou effectuer d'autres actions ici
+      // Authentication successful
 
-      res.status(200).json({ message: 'Authentification réussie.' });
+      // Generate an authentication token
+      const secretKey = process.env.JWT_SECRET;
+      if (!secretKey) {
+        return res.status(500).json({
+          error:
+            'JWT_SECRET not set in the environment. Please contact the administrator.',
+        });
+      }
+
+      const token = jwt.sign({ username: user.username }, secretKey, {
+        expiresIn: '1h',
+      });
+
+      // Set the token as an HTTP-only cookie
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Set 'secure' to true in production
+        maxAge: 3600000, // Cookie will expire after 1 hour (in milliseconds)
+        sameSite: 'strict', // Adjust this based on your requirements
+      });
+
+      res.status(200).json({
+        message: 'Authentication successful.',
+        user: user,
+        token: token,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({

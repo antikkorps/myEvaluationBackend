@@ -16,6 +16,7 @@ const corsOptions = {
 };
 
 app.use(cors());
+app.use(cookieParser());
 
 //parse requests of content-type - application/json
 app.use(express.json());
