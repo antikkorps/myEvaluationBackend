@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 //open the MySQL connection
 connection.connect((error) => {
   if (error) throw error;
-  console.log('Successfully connected to the database.');
+  console.log('Great! Successfully connected to the database.');
 });
 
 // Exportez la connexion pour l'utiliser dans d'autres fichiers
