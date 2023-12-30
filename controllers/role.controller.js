@@ -111,7 +111,7 @@ const RoleController = {
       console.error(error);
       res.status(500).json({
         error:
-          'Une erreur est survenue lors de la suppression de tous les rôles.',
+          'Une erreur est survenue lors de la suppression de l'ensemble des rôles.',
       });
     }
   },
