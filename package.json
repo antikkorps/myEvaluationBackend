@@ -4,7 +4,8 @@
   "description": "The backend for a service that will help building evaluation for different contexts",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "nodejs",
@@ -24,7 +25,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
     "mysql": "^2.18.1",
-    "mysql2": "^3.3.5"
+    "mysql2": "^3.3.5",
+    "nodemon": "^3.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",

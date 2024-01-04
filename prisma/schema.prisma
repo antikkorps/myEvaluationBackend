@@ -7,130 +7,188 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//USERS AND ROLES
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String   @db.VarChar(255)
+  id        Int    @id @default(autoincrement())
+  name      String @db.VarChar(255)
   firstName String @db.VarChar(255)
-  username String   @db.VarChar(255)
-  email    String   @db.VarChar(255)
-  password String   @db.VarChar(255)
-  fonction String @db.VarChar(255)
-  role_id Int 
-  
-  role Role @relation(fields: [role_id], references: [id])
-  evaluations_formateur  Evaluation[] @relation("formateur")
+  username  String @db.VarChar(255)
+  email     String @db.VarChar(255)
+  password  String @db.VarChar(255)
+  fonction  String @db.VarChar(255)
+
+  //entreprise
+  entreprise_id Int
+  entreprise    Entreprise @relation(fields: [entreprise_id], references: [id])
+
+  //role
+  role_id Int
+  role    Role @relation(fields: [role_id], references: [id])
+
+  //relations to evaluations
+  evaluations_formateur   Evaluation[] @relation("formateur")
   evaluations_participant Evaluation[] @relation("participant")
-  
+
+  //index sur email et name
+  @@index([email], name: "email")
+  @@index([name], name: "name")
+  @@map("users")
 }
 
 model Role {
-  id     Int      @id @default(autoincrement())
-  name        String   @db.VarChar(255)
-  description String?  @db.VarChar(255)
-  slug        String   @db.VarChar(255)
-  users User[]
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(255)
+  description String? @db.VarChar(255)
+  slug        String  @db.VarChar(255)
+  users       User[]
+
+  @@index([name], name: "name")
+  @@map("roles")
 }
 
+//EVALUATIONS
 model Evaluation {
-  id       Int            @id @default(autoincrement())
-  formateur_id        Int
-  participant_id      Int
-  note_globale        Int @default(0)
-  commentaire         String?
-  date                DateTime
-  contrat_id          Int
-  formateur           User           @relation("formateur", fields: [formateur_id], references: [id])
-  participant         User           @relation("participant", fields: [participant_id], references: [id])
-  contrat             Contrat        @relation(fields: [contrat_id], references: [id])
-  evaluation_items    Evaluation_Item[]
-  }
+  id               Int               @id @default(autoincrement())
+  formateur_id     Int
+  participant_id   Int
+  note_globale     Int               @default(0)
+  commentaire      String?
+  date             DateTime
+  contrat_id       Int
+  formateur        User              @relation("formateur", fields: [formateur_id], references: [id])
+  participant      User              @relation("participant", fields: [participant_id], references: [id])
+  contrat          Contrat           @relation(fields: [contrat_id], references: [id])
+  evaluation_items Evaluation_Item[]
+
+  @@map("evaluations")
+}
 
 model Evaluation_Item {
-  id  Int              @id @default(autoincrement())
-  evaluation_id       Int
-  methode_item_id     Int
-  note                Int
-  commentaire         String?
-  evaluation          Evaluation      @relation(fields: [evaluation_id], references: [id])
-  methode_item        Methode_Item    @relation(fields: [methode_item_id], references: [id])
-  }
+  id                      Int                      @id @default(autoincrement())
+  evaluation_id           Int
+  methode_item_id         Int
+  note                    Int
+  commentaire             String?
+  evaluation              Evaluation               @relation(fields: [evaluation_id], references: [id])
+  methode_item            Methode_Item             @relation(fields: [methode_item_id], references: [id])
+  evaluation_commentaires Evaluation_Commentaire[]
 
-model Client {
-  id          Int              @id @default(autoincrement())
-  name                String
-  address            String?
-  city               String?
-  zipcode            String?
-  contrats           Contrat[]
+  @@map("evaluation_items")
 }
 
+model Evaluation_Commentaire {
+  id                 Int             @id @default(autoincrement())
+  evaluation_id      Int
+  commentaire        String?
+  evaluation_item_id Int
+  evaluation_item    Evaluation_Item @relation(fields: [evaluation_item_id], references: [id])
+
+  @@map("evaluation_commentaires")
+}
+
+//CLIENTS AND CONTRACTS
+model Entreprise {
+  id       Int       @id @default(autoincrement())
+  name     String
+  address  String?
+  city     String?
+  zipcode  String?
+  contrats Contrat[]
+  User     User[]
+
+  @@map("entreprises")
+}
 
 model Contrat {
-  id                Int      @id @default(autoincrement())
-  name              String
-  description       String
-  published         Boolean  @default(false)
-  begin_date        DateTime @default(now())
-  end_date          DateTime @default (now())
-  theme             String
-  client_id         Int
-  client              Client @relation(fields: [client_id], references: [id])
-  contrat_methodes    Contrat_Methode[]
-  evaluations         Evaluation[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  published   Boolean  @default(false)
+  begin_date  DateTime @default(now())
+  end_date    DateTime @default(now())
+  theme       String
+
+  // client ID which references the Entreprise model
+  client_id  Int
+  entreprise Entreprise @relation(fields: [client_id], references: [id])
+
+  // Methode used in the contrat
+  contrat_methodes Contrat_Methode[]
+
+  //Evaluations linked to the contrat
+  evaluations Evaluation[]
+
+  @@map("contrats")
 }
 
+//METHODES
 model Contrat_Methode {
-  id  Int            @id @default(autoincrement())
-  contrat_id          Int
-  methode_id          Int
-  contrat             Contrat        @relation(fields: [contrat_id], references: [id])
-  methode             Methode         @relation(fields: [methode_id], references: [id])
+  id         Int     @id @default(autoincrement())
+  contrat_id Int
+  methode_id Int
+  contrat    Contrat @relation(fields: [contrat_id], references: [id])
+  methode    Methode @relation(fields: [methode_id], references: [id])
+
+  @@map("contrat_methodes")
 }
 
 model Tag {
-  id             Int              @id @default(autoincrement())
-  name                String
-  description        String?
-  methode_tags       Methode_Tag[]
-  }
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  methode_tags Methode_Tag[]
 
-  model Methode_Tag {
-  id     Int              @id @default(autoincrement())
-  methode_id         Int
-  tag_id             Int
-  methode            Methode         @relation(fields: [methode_id], references: [id])
-  tag                Tag             @relation(fields: [tag_id], references: [id])
+  @@map("tags")
+}
+
+model Methode_Tag {
+  id         Int     @id @default(autoincrement())
+  methode_id Int
+  tag_id     Int
+  methode    Methode @relation(fields: [methode_id], references: [id])
+  tag        Tag     @relation(fields: [tag_id], references: [id])
+
+  @@map("methode_tags")
 }
 
 model Methode {
-  id   Int            @id @default(autoincrement())
-  name          String
-  description  String?
-  methode_items Methode_Item[]
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String?
+  methode_items    Methode_Item[]
   contrat_methodes Contrat_Methode[]
-  methode_tags Methode_Tag[]
+  methode_tags     Methode_Tag[]
+
+  @@map("methodes")
 }
 
+//ITEMS
 model Item {
-  id     Int            @id @default(autoincrement())
-  nom         String
-  description String?
+  id            Int            @id @default(autoincrement())
+  nom           String
+  description   String?
   methode_items Methode_Item[]
+
+  @@map("items")
 }
 
 model Methode_Item {
-  id Int         @id @default(autoincrement())
-  methode_id      Int
-  item_id         Int
-  methode        Methode    @relation(fields: [methode_id], references: [id])
-  item            Item        @relation(fields: [item_id], references: [id])
+  id               Int               @id @default(autoincrement())
+  methode_id       Int
+  item_id          Int
+  methode          Methode           @relation(fields: [methode_id], references: [id])
+  item             Item              @relation(fields: [item_id], references: [id])
   evaluation_items Evaluation_Item[]
+
+  @@map("methode_items")
 }
 
 model Item_Note {
-  id           Int             @id @default(autoincrement())
-  evaluation_item_id     Int
-  evaluation_id          Int
-  note                   Int
-  commentaire            String?
+  id                 Int     @id @default(autoincrement())
+  evaluation_item_id Int
+  evaluation_id      Int
+  note               Int
+  commentaire        String?
+
+  @@map("item_notes")
 }

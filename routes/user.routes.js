@@ -1,25 +1,23 @@
-module.exports = (app) => {
-  const users = require('../controllers/user.controller.js');
-  const router = require('express').Router();
+const users = require("../controllers/user.controller.js")
+const router = require("express").Router()
 
-  //create a new role
-  router.post('/', users.create);
+//create a new role
+router.post("/", users.create)
 
-  //retrieve all roles
-  router.get('/', users.findAll);
+//retrieve all roles
+router.get("/", users.findAll)
 
-  //retrieve a single role with id
-  router.get('/:id', users.findOne);
+//retrieve a single role with id
+router.get("/:id", users.findOne)
 
-  //update a role with id
-  router.put('/:id', users.update);
-  router.patch('/:id', users.update);
+//update a role with id
+router.put("/:id", users.update)
+router.patch("/:id", users.update)
 
-  //delete a role with id
-  router.delete('/:id', users.delete);
+//delete a role with id
+router.delete("/:id", users.delete)
 
-  //delete all roles
-  router.delete('/', users.deleteAll);
+//delete all roles
+router.delete("/", users.deleteAll)
 
-  app.use('/api/v1/users', router);
-};
+module.exports = router

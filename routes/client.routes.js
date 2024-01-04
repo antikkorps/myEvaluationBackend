@@ -1,25 +1,25 @@
-module.exports = (app) => {
-  const clients = require('../controllers/client.controller.js');
-  const router = require('express').Router();
+const express = require("express")
 
-  //create a new client
-  router.post('/', clients.create);
+const clients = require("../controllers/client.controller.js")
+const router = require("express").Router()
 
-  //retrieve all clients
-  router.get('/', clients.findAll);
+//create a new client
+router.post("/", clients.create)
 
-  //retrieve a single client with id
-  router.get('/:id', clients.findOne);
+//retrieve all clients
+router.get("/", clients.findAll)
 
-  //update a client with id
-  router.put('/:id', clients.update);
-  router.patch('/:id', clients.update);
+//retrieve a single client with id
+router.get("/:id", clients.findOne)
 
-  //delete a client with id
-  router.delete('/:id', clients.delete);
+//update a client with id
+router.put("/:id", clients.update)
+router.patch("/:id", clients.update)
 
-  //delete all clients
-  router.delete('/', clients.deleteAll);
+//delete a client with id
+router.delete("/:id", clients.delete)
 
-  app.use('/api/v1/clients', router);
-};
+//delete all clients
+router.delete("/", clients.deleteAll)
+
+module.exports = router

@@ -1,28 +1,28 @@
-module.exports = (app) => {
-  const contrat = require('../controllers/contrat.controller.js');
-  const router = require('express').Router();
+const express = require("express")
 
-  //create a new contrat
-  router.post('/', contrat.create);
+const contrat = require("../controllers/contrat.controller.js")
+const router = require("express").Router()
 
-  //retrieve all contrats
-  router.get('/', contrat.findAll);
+//create a new contrat
+router.post("/", contrat.create)
 
-  //retrieve all published contrats
-  router.get('/published', contrat.findAllPublished);
+//retrieve all contrats
+router.get("/", contrat.findAll)
 
-  //retrieve a single contrat with id
-  router.get('/:id', contrat.findOne);
+//retrieve all published contrats
+router.get("/published", contrat.findAllPublished)
 
-  //update a contrat with id
-  router.put('/:id', contrat.update);
-  router.patch('/:id', contrat.update);
+//retrieve a single contrat with id
+router.get("/:id", contrat.findOne)
 
-  //delete a contrat with id
-  router.delete('/:id', contrat.delete);
+//update a contrat with id
+router.put("/:id", contrat.update)
+router.patch("/:id", contrat.update)
 
-  //delete all contrats
-  router.delete('/', contrat.deleteAll);
+//delete a contrat with id
+router.delete("/:id", contrat.delete)
 
-  app.use('/api/v1/contrats', router);
-};
+//delete all contrats
+router.delete("/", contrat.deleteAll)
+
+module.exports = router

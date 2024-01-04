@@ -1,6 +1,7 @@
 # myEvaluationBackend
 
 This is the backend of the project myEvaluation. It is a GraphQL API that allows to create, read, update and delete users, evaluations and related.
+
 ## work in progress...
 
 ```bash
