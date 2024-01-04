@@ -1,28 +1,28 @@
-module.exports = (app) => {
-  const evaluations = require("../controllers/evaluation.controller.js")
-  const router = require("express").Router()
+const express = require("express")
 
-  //create a new evaluation
-  router.post("/", evaluations.create)
+const evaluation = require("../controllers/evaluation.controller.js")
+const router = require("express").Router()
 
-  //retrieve all evaluations
-  router.get("/", evaluations.findAll)
+//create a new evaluation
+router.post("/", evaluation.create)
 
-  //retrieve all published evaluations
-  router.get("/published", evaluations.findAllPublished)
+//retrieve all evaluations
+router.get("/", evaluation.findAll)
 
-  //retrieve a single evaluation with id
-  router.get("/:id", evaluations.findOne)
+//retrieve all published evaluations
+router.get("/published", evaluation.findAllPublished)
 
-  //update a evaluation with id
-  router.put("/:id", evaluations.update)
-  router.patch("/:id", evaluations.update)
+//retrieve a single evaluation with id
+router.get("/:id", evaluation.findOne)
 
-  //delete a evaluation with id
-  router.delete("/:id", evaluations.delete)
+//update a evaluation with id
+router.put("/:id", evaluation.update)
+router.patch("/:id", evaluation.update)
 
-  //delete all evaluations
-  router.delete("/", evaluations.deleteAll)
+//delete a evaluation with id
+router.delete("/:id", evaluation.delete)
 
-  app.use("/api/v1/evaluations", router)
-}
+//delete all evaluations
+router.delete("/", evaluation.deleteAll)
+
+module.exports = router
