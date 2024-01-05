@@ -2,13 +2,17 @@ const express = require("express")
 
 const entreprises = require("../controllers/entreprise.controller.js")
 const router = require("express").Router()
-const { verifyToken } = require("../authentication/auth")
+
+const { verifyToken, isAdmin, getEmailFromToken } = require("../authentication/auth")
+
+//verifyToken is a middleware to check the validity of the token
+router.use(verifyToken, getEmailFromToken)
 
 //create a new entreprise
-router.post("/", entreprises.create)
+router.post("/", isAdmin, entreprises.create)
 
 //retrieve all entreprises
-router.get("/all", verifyToken, entreprises.findAll)
+router.get("/all", entreprises.findAll)
 
 //retrieve a single entreprise with id
 router.get("/:id", entreprises.findOne)

@@ -3,6 +3,11 @@ const express = require("express")
 const evaluation = require("../controllers/evaluation.controller.js")
 const router = require("express").Router()
 
+const { verifyToken } = require("../authentication/auth")
+
+//verifyToken is a middleware to check the validity of the token
+router.use(verifyToken)
+
 //create a new evaluation
 router.post("/", evaluation.create)
 

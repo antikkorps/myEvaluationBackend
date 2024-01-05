@@ -1,23 +1,28 @@
 const users = require("../controllers/user.controller.js")
 const router = require("express").Router()
 
-//create a new role
+const { verifyToken } = require("../authentication/auth")
+
+//verifyToken is a middleware to check the validity of the token
+router.use(verifyToken)
+
+//create a new user
 router.post("/", users.create)
 
-//retrieve all roles
+//retrieve all users
 router.get("/", users.findAll)
 
-//retrieve a single role with id
+//retrieve a single user with id
 router.get("/:id", users.findOne)
 
-//update a role with id
+//update a user with id
 router.put("/:id", users.update)
 router.patch("/:id", users.update)
 
-//delete a role with id
+//delete a user with id
 router.delete("/:id", users.delete)
 
-//delete all roles
+//delete all users
 router.delete("/", users.deleteAll)
 
 module.exports = router

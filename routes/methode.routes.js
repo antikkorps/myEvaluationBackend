@@ -1,6 +1,11 @@
 const methodes = require("../controllers/methode.controller.js")
 const router = require("express").Router()
 
+const { verifyToken } = require("../authentication/auth")
+
+//verifyToken is a middleware to check the validity of the token
+router.use(verifyToken)
+
 //create a new methode
 router.post("/", methodes.create)
 

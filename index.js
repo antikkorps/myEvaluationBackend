@@ -26,12 +26,6 @@ app.use(express.json())
 //parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }))
 
-// Utility function to decode the JWT token and get the username
-function getUsernameFromToken(token) {
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-  return decodedToken.username
-}
-
 // Route to connect the user and get the JWT Token
 
 const v1Routes = require("./routes/v1")

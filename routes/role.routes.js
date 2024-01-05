@@ -1,6 +1,11 @@
 const roles = require("../controllers/role.controller.js")
 const router = require("express").Router()
 
+const { verifyToken } = require("../authentication/auth")
+
+//verifyToken is a middleware to check the validity of the token
+router.use(verifyToken)
+
 //create a new role
 router.post("/", roles.create)
 
