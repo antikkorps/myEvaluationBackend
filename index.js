@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken")
 
 const { PrismaClient } = require("@prisma/client")
 const { verifyToken } = require("./authentication/auth")
-const loginRoute = require("./routes/login.routes")
+const loginRoute = require("./routes/auth.routes")
 const prisma = new PrismaClient()
 const app = express()
 
