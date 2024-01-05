@@ -8,7 +8,7 @@ const { verifyToken } = require("../authentication/auth")
 router.post("/", entreprises.create)
 
 //retrieve all entreprises
-router.get("/", verifyToken, entreprises.findAll)
+router.get("/all", verifyToken, entreprises.findAll)
 
 //retrieve a single entreprise with id
 router.get("/:id", entreprises.findOne)
