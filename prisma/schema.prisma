@@ -28,6 +28,11 @@ model User {
   evaluations_formateur   Evaluation[] @relation("formateur")
   evaluations_participant Evaluation[] @relation("participant")
 
+  //reset Token
+
+  resetToken String? @db.VarChar(255)
+  resetTokenExpiry DateTime?
+
   //Date of creation and update
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

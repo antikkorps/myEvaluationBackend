@@ -22,25 +22,37 @@ const generateToken = (payload) => {
   return token
 }
 
-// Verify a JWT Token and get the information about the user
-const verifyToken = (token) => {
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    return decoded
-  } catch (error) {
-    // If the token is invalid or expired
-    return null
-  }
+const generateResetToken = () => {
+  const token = jwt.sign({ reset: true }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  })
+  return token
 }
 
-//compare password
-const comparePassword = (plainPassword, passwordHash) => {
-  const compared = bcrypt.compareSync(plainPassword, passwordHash)
-  return compared
+// Verify a JWT Token and grant access to the user
+function verifyToken(req, res, next) {
+  const bearerHeader = req.headers["authorization"]
+  if (!bearerHeader) {
+    return res.status(403).send({ auth: false, message: "No token provided." })
+  }
+
+  const bearer = bearerHeader.split(" ")
+  const bearerToken = bearer[1]
+
+  jwt.verify(bearerToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res
+        .status(500)
+        .send({ auth: false, message: "Failed to authenticate token." })
+    }
+    // if everything good, save to request for use in other routes
+    req.userId = decoded.id
+    next()
+  })
 }
 
 module.exports = {
   generateToken,
+  generateResetToken,
   verifyToken,
-  comparePassword,
 }

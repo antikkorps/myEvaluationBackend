@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
-const { generateToken } = require("../authentication/auth.js")
+const { generateToken, generateResetToken } = require("../authentication/auth.js")
 
 // Signup function
 const signup = (req, res) => {
@@ -58,7 +58,37 @@ const signin = (req, res) => {
 
 // Forgotten password function
 const forgottenPass = (req, res) => {
-  // TODO: Implement forgotten password logic
+  const { email } = req.body
+  prisma.user
+    .findUnique({
+      where: {
+        email,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "Utilisateur non trouvé." })
+      }
+      const resetToken = generateResetToken()
+      return prisma.user.update({
+        where: { email },
+        data: {
+          resetToken,
+          resetTokenExpiry: new Date(Date.now() + 3600000), // 1 hour
+        },
+      })
+    })
+    .then(() => {
+      "é"
+      //TODO Envoyer un email à l'utilisateur avec le lien de réinitialisation
+      res.status(200).json({ message: "Email envoyé." })
+    })
+    .catch((error) => {
+      console.error(error)
+      res.status(500).json({
+        error: "Une erreur est survenue lors de la réinitialisation du mot de passe.",
+      })
+    })
 }
 
 module.exports = {
