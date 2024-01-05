@@ -13,9 +13,9 @@ router.post("/signup", auth.signup)
 router.post("/login", auth.signin)
 
 // Forgot password route
-router.post("/forgotten-password", auth.forgottenPass)
+router.post("/forgotten-password", auth.forgottenPassword)
 
 // Reset password route
-router.post("/reset-password", auth.resetPass)
+router.post("/reset-password", auth.resetPassword)
 
 module.exports = router

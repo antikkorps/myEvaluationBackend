@@ -1,3 +1,4 @@
+const nodemailer = require("nodemailer")
 const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
@@ -59,6 +60,7 @@ const signin = (req, res) => {
 // Forgotten password function
 const forgottenPassword = (req, res) => {
   const { email } = req.body
+  let resetToken
   prisma.user
     .findUnique({
       where: {
@@ -69,7 +71,7 @@ const forgottenPassword = (req, res) => {
       if (!user) {
         return res.status(404).json({ error: "Utilisateur non trouvé." })
       }
-      const resetToken = generateResetToken()
+      resetToken = generateResetToken()
       return prisma.user.update({
         where: { email },
         data: {
@@ -79,7 +81,26 @@ const forgottenPassword = (req, res) => {
       })
     })
     .then(() => {
-      //TODO Envoyer un email à l'utilisateur avec le lien de réinitialisation
+      const transporter = nodemailer.createTransport({
+        host: process.env.MAIL_HOST,
+        port: 587,
+        auth: {
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      })
+      const mailOptions = {
+        from: "noreply@myeval.com",
+        to: email,
+        subject: "Réinitialisation du mot de passe",
+        html: `
+          <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
+          <p>Cliquez sur ce <a href="${process.env.CLIENT_URL}/reset-password/${resetToken}">lien</a> pour réinitialiser votre mot de passe.</p>
+          <p>Si vous n'avez pas demandé la réinitialisation de votre mot de passe, vous pouvez ignorer cet email.</p>
+        `,
+      }
+      console.log(transporter)
+      console.log(mailOptions)
       res.status(200).json({ message: "Email envoyé." })
     })
     .catch((error) => {
