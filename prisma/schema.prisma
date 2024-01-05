@@ -9,8 +9,8 @@ datasource db {
 
 //USERS AND ROLES
 model User {
-  id        Int    @id @default(autoincrement())
-  lastName      String? @db.VarChar(255)
+  id        String     @id @default(uuid())
+  lastName  String? @db.VarChar(255)
   firstName String? @db.VarChar(255)
   email     String @db.VarChar(255) @unique
   password  String @db.VarChar(255)
@@ -56,15 +56,23 @@ enum Role {
 //EVALUATIONS
 model Evaluation {
   id               Int               @id @default(autoincrement())
-  formateur_id     Int
-  participant_id   Int
+  date             DateTime
+
+  //global note && comment
   note_globale     Int               @default(0)
   commentaire      String?
-  date             DateTime
-  contrat_id       Int
+  
+  //formateur and participant
+  formateur_id     String
   formateur        User              @relation("formateur", fields: [formateur_id], references: [id])
+  participant_id   String
   participant      User              @relation("participant", fields: [participant_id], references: [id])
+  
+  //contrat
+  contrat_id       Int
   contrat          Contrat           @relation(fields: [contrat_id], references: [id])
+  
+  //Methode items
   evaluation_items Evaluation_Item[]
 
   @@map("evaluations")
