@@ -57,7 +57,7 @@ const signin = (req, res) => {
 }
 
 // Forgotten password function
-const forgottenPass = (req, res) => {
+const forgottenPassword = (req, res) => {
   const { email } = req.body
   prisma.user
     .findUnique({
@@ -79,9 +79,53 @@ const forgottenPass = (req, res) => {
       })
     })
     .then(() => {
-      "é"
       //TODO Envoyer un email à l'utilisateur avec le lien de réinitialisation
       res.status(200).json({ message: "Email envoyé." })
+    })
+    .catch((error) => {
+      console.error(error)
+      res.status(500).json({
+        error: "Une erreur est survenue lors de la réinitialisation du mot de passe.",
+      })
+    })
+}
+
+const resetPassword = (req, res) => {
+  const { resetToken, password } = req.body
+  prisma.user
+    .findUnique({
+      where: {
+        resetToken,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "Utilisateur non trouvé." })
+      }
+      if (user.resetTokenExpiry < Date.now()) {
+        return res.status(401).json({ error: "Le token de réinitialisation a expiré." })
+      }
+      const saltRounds = 10
+      bcrypt.hash(password, saltRounds, async (err, hash) => {
+        try {
+          const user = await prisma.user.update({
+            where: { resetToken },
+            data: {
+              password: hash,
+              resetToken: null,
+              resetTokenExpiry: null,
+            },
+          })
+          const token = generateToken(user)
+          res.cookie("token", token, { httpOnly: true })
+          res.status(200).json({ token })
+        } catch (error) {
+          console.error(error)
+          res.status(500).json({
+            error: "Une erreur est survenue lors de la réinitialisation du mot de passe.",
+          })
+        }
+      })
     })
     .catch((error) => {
       console.error(error)
@@ -94,5 +138,6 @@ const forgottenPass = (req, res) => {
 module.exports = {
   signup,
   signin,
-  forgottenPass,
+  forgottenPassword,
+  resetPassword,
 }
