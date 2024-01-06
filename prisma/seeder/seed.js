@@ -32,6 +32,17 @@ async function main() {
     })
   }
 
+  // Create 10 PARTICIPANTS users
+  for (let i = 0; i < 10; i++) {
+    await prisma.user.create({
+      data: {
+        email: faker.internet.email(),
+        password: await bcrypt.hash(faker.internet.password(), 10),
+        role: "PARTICIPANT",
+      },
+    })
+  }
+
   // Create 10 companies
   for (let i = 0; i < 10; i++) {
     await prisma.company.create({
@@ -39,7 +50,7 @@ async function main() {
         name: faker.company.name(),
         address: faker.location.streetAddress(),
         city: faker.location.city(),
-        zipcode: faker.location.zipcode(),
+        zipcode: faker.location.zipCode(),
         country: faker.location.country(),
       },
     })
@@ -73,7 +84,7 @@ async function main() {
   // }
 
   //message during seed process
-  console.log("Seeding finished.")
+  console.log("Seeding finished. It's all good!")
 }
 
 main()
