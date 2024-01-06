@@ -18,7 +18,7 @@ model User {
 
   //entreprise
   entreprise_id Int?
-  entreprise    Entreprise? @relation(fields: [entreprise_id], references: [id])
+  entreprise    Company? @relation(fields: [entreprise_id], references: [id])
 
   //role
   
@@ -102,16 +102,17 @@ model Evaluation_Commentaire {
 }
 
 //ENTREPRISES AND CONTRACTS
-model Entreprise {
+model Company {
   id       Int       @id @default(autoincrement())
   name     String
   address  String?
   city     String?
   zipcode  String?
+  country String?
   contrats Contrat[]
   User     User[]
 
-  @@map("entreprises")
+  @@map("companies")
 }
 
 model Contrat {
@@ -125,7 +126,7 @@ model Contrat {
 
   // client ID which references the Entreprise model
   client_id  Int
-  entreprise Entreprise @relation(fields: [client_id], references: [id])
+  entreprise Company @relation(fields: [client_id], references: [id])
 
   // Methode used in the contrat
   contrat_methodes Contrat_Methode[]

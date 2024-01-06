@@ -34,9 +34,13 @@ async function main() {
 
   // Create 10 companies
   for (let i = 0; i < 10; i++) {
-    await prisma.entreprise.create({
+    await prisma.company.create({
       data: {
-        name: faker.company.companyName(),
+        name: faker.company.name(),
+        address: faker.location.streetAddress(),
+        city: faker.location.city(),
+        zipcode: faker.location.zipcode(),
+        country: faker.location.country(),
       },
     })
   }
