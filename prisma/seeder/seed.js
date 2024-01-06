@@ -32,14 +32,14 @@ async function main() {
     })
   }
 
-  // // Create 10 companies
-  // for (let i = 0; i < 10; i++) {
-  //   await prisma.entreprise.create({
-  //     data: {
-  //       name: faker.company.companyName(),
-  //     },
-  //   })
-  // }
+  // Create 10 companies
+  for (let i = 0; i < 10; i++) {
+    await prisma.entreprise.create({
+      data: {
+        name: faker.company.companyName(),
+      },
+    })
+  }
 
   // // Create 10 evaluations
   // for (let i = 0; i < 10; i++) {

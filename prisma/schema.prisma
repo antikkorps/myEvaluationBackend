@@ -101,7 +101,7 @@ model Evaluation_Commentaire {
   @@map("evaluation_commentaires")
 }
 
-//CLIENTS AND CONTRACTS
+//ENTREPRISES AND CONTRACTS
 model Entreprise {
   id       Int       @id @default(autoincrement())
   name     String
