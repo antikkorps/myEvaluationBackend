@@ -16,6 +16,16 @@ Do not forget to create a .env file with the following variables:
 DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 ```
 
+or make a copy of the .env.example file.
+
+You can make
+
+```bash
+npm run seed
+```
+
+To seed data into the database
+
 During all the creation process of this project, I have been using the following technologies:
 
 - Prisma
