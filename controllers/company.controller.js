@@ -15,6 +15,7 @@ const CompanyController = {
           city,
           zipcode,
           country,
+          logo,
         },
       })
       res.status(201).json(newCompany)
@@ -78,6 +79,7 @@ const CompanyController = {
           city,
           zipcode,
           country,
+          logo,
         },
       })
       res.status(200).json(updatedCompany)

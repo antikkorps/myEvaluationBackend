@@ -38,6 +38,7 @@ async function main() {
       data: {
         email: faker.internet.email(),
         password: await bcrypt.hash(faker.internet.password(), 10),
+        avatar: faker.internet.avatar(),
         role: "PARTICIPANT",
       },
     })
@@ -52,6 +53,7 @@ async function main() {
         city: faker.location.city(),
         zipcode: faker.location.zipCode(),
         country: faker.location.country(),
+        logo: faker.image.urlPlaceholder({ width: 128, height: 128 }),
       },
     })
   }

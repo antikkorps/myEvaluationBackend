@@ -15,6 +15,7 @@ model User {
   email     String @db.VarChar(255) @unique
   password  String @db.VarChar(255)
   fonction  String? @db.VarChar(255)
+  avatar    String? @db.VarChar(255)
 
   //entreprise
   entreprise_id Int?
@@ -109,6 +110,7 @@ model Company {
   city     String?
   zipcode  String?
   country String?
+  logo String?
   contrats Contrat[]
   User     User[]
 
