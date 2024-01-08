@@ -39,7 +39,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //index sur email et name
+  //index on email et name
   @@index([email], name: "email")
   @@index([lastName], name: "lastName")
   @@map("users")
