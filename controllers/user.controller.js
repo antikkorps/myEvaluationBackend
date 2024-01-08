@@ -7,8 +7,17 @@ const cookieParser = require("cookie-parser")
 const UserController = {
   // Create a new user
   async create(req, res) {
-    const { name, firstName, username, email, password, role_id, fonction, avatar } =
-      req.body
+    const {
+      name,
+      firstName,
+      username,
+      email,
+      phone,
+      password,
+      role_id,
+      fonction,
+      avatar,
+    } = req.body
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
       const newUser = await prisma.user.create({
@@ -17,6 +26,7 @@ const UserController = {
           firstName,
           username,
           email,
+          phone,
           password: hashedPassword,
           role_id,
           fonction,
@@ -74,7 +84,7 @@ const UserController = {
   // Update a user by ID
   async update(req, res) {
     const { id } = req.params
-    const { name, email, firstName, username, password, role, fonction, avatar } =
+    const { name, firstName, username, email, phone, password, role, fonction, avatar } =
       req.body
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
@@ -82,9 +92,10 @@ const UserController = {
         where: { id: parseInt(id, 10) },
         data: {
           name,
-          email,
           firstName,
           username,
+          email,
+          phone,
           password: hashedPassword,
           role,
           fonction,

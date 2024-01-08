@@ -10,12 +10,13 @@ datasource db {
 //USERS AND ROLES
 model User {
   id        String     @id @default(uuid())
-  lastName  String? @db.VarChar(255)
-  firstName String? @db.VarChar(255)
-  email     String @db.VarChar(255) @unique
-  password  String @db.VarChar(255)
-  fonction  String? @db.VarChar(255)
-  avatar    String? @db.VarChar(255)
+  lastName  String?    @db.VarChar(255)
+  firstName String?    @db.VarChar(255)
+  email     String     @db.VarChar(255) @unique
+  phone     String?    @db.VarChar(255)
+  password  String     @db.VarChar(255)
+  fonction  String?    @db.VarChar(255)
+  avatar    String?    @db.VarChar(255)
 
   //entreprise
   entreprise_id Int?
