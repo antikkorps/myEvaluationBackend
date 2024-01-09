@@ -5,12 +5,11 @@ const prisma = new PrismaClient()
 const EvaluationCommentaireController = {
   // Create a new evaluationCommentaire
   async create(req, res) {
-    const { evaluationCommentaire_id, evaluation_id, user_id, commentaire, date } =
-      req.body
+    const { id, evaluation_id, user_id, commentaire, date } = req.body
     try {
       const newEvaluationCommentaire = await prisma.evaluation_Commentaire.create({
         data: {
-          evaluationCommentaire_id,
+          id,
           evaluation_id,
           user_id,
           commentaire,
