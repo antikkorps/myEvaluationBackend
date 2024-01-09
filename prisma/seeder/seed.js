@@ -9,7 +9,7 @@ async function main() {
   const admin = await prisma.user.create({
     data: {
       email: "admin@example.com",
-      password: await bcrypt.hash("admin", 10),
+      password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 10),
       role: "ADMIN",
     },
   })
@@ -17,7 +17,7 @@ async function main() {
   const testUser = await prisma.user.create({
     data: {
       email: "user@example.com",
-      password: await bcrypt.hash("user", 10),
+      password: await bcrypt.hash(process.env.USER_PASSWORD, 10),
       role: "USER",
     },
   })
@@ -58,32 +58,35 @@ async function main() {
     })
   }
 
-  // // Create 10 evaluations
-  // for (let i = 0; i < 10; i++) {
-  //   await prisma.evaluation.create({
-  //     data: {
-  //       score: faker.random.number({ min: 1, max: 5 }),
-  //     },
-  //   })
-  // }
+  // Create 10 evaluations
+  for (let i = 0; i < 10; i++) {
+    await prisma.evaluation.create({
+      data: {
+        date: faker.date.recent(),
+        note_globale: faker.number.int({ min: 0, max: 5 }),
+        commentaire: faker.lorem.sentences(3),
+      },
+    })
+  }
 
-  // // Create 10 methods
-  // for (let i = 0; i < 10; i++) {
-  //   await prisma.methode.create({
-  //     data: {
-  //       name: faker.lorem.words(3),
-  //     },
-  //   })
-  // }
+  // Create 10 methods
+  for (let i = 0; i < 10; i++) {
+    await prisma.methode.create({
+      data: {
+        name: faker.lorem.words(3),
+        description: faker.lorem.sentences(2),
+      },
+    })
+  }
 
-  // // Create 10 tags
-  // for (let i = 0; i < 10; i++) {
-  //   await prisma.tag.create({
-  //     data: {
-  //       name: faker.lorem.word(),
-  //     },
-  //   })
-  // }
+  // Create 10 tags
+  for (let i = 0; i < 10; i++) {
+    await prisma.tag.create({
+      data: {
+        name: faker.lorem.word(),
+      },
+    })
+  }
 
   //message during seed process
   console.log("Seeding finished. It's all good!")

@@ -68,14 +68,14 @@ model Evaluation {
   commentaire      String?
   
   //formateur and participant
-  formateur_id     String
-  formateur        User              @relation("formateur", fields: [formateur_id], references: [id])
-  participant_id   String
-  participant      User              @relation("participant", fields: [participant_id], references: [id])
+  formateur_id     String?
+  formateur        User?              @relation("formateur", fields: [formateur_id], references: [id])
+  participant_id   String?
+  participant      User?              @relation("participant", fields: [participant_id], references: [id])
   
   //contrat
-  contrat_id       Int
-  contrat          Contrat           @relation(fields: [contrat_id], references: [id])
+  contrat_id       Int?
+  contrat          Contrat?           @relation(fields: [contrat_id], references: [id])
   
   //Methode items
   evaluation_items Evaluation_Item[]
