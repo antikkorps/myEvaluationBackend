@@ -10,7 +10,7 @@ router.use(verifyToken)
 router.post("/", tags.create)
 
 //retrieve all tags
-router.get("/", tags.findAll)
+router.get("/all", tags.findAll)
 
 //retrieve a single tag with id
 router.get("/:id", tags.findOne)

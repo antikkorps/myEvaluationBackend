@@ -111,6 +111,7 @@ const forgottenPassword = (req, res) => {
     })
 }
 
+// Reset password function
 const resetPassword = (req, res) => {
   const { resetToken, password } = req.body
   prisma.user

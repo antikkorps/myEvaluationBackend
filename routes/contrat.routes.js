@@ -12,7 +12,7 @@ router.use(verifyToken)
 router.post("/", contrat.create)
 
 //retrieve all contrats
-router.get("/", contrat.findAll)
+router.get("/all", contrat.findAll)
 
 //retrieve all published contrats
 router.get("/published", contrat.findAllPublished)

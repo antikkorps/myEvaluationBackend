@@ -10,7 +10,7 @@ router.use(verifyToken)
 router.post("/", methodes.create)
 
 //retrieve all methodes
-router.get("/", methodes.findAll)
+router.get("/all", methodes.findAll)
 
 //retrieve a single methode with id
 router.get("/:id", methodes.findOne)

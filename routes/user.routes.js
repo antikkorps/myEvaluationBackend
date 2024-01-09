@@ -10,7 +10,7 @@ router.use(verifyToken)
 router.post("/", users.create)
 
 //retrieve all users
-router.get("/", users.findAll)
+router.get("/all", users.findAll)
 
 //retrieve a single user with id
 router.get("/:id", users.findOne)

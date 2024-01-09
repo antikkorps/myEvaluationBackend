@@ -12,7 +12,7 @@ router.use(verifyToken)
 router.post("/", evaluation.create)
 
 //retrieve all evaluations
-router.get("/", evaluation.findAll)
+router.get("/all", evaluation.findAll)
 
 //retrieve all published evaluations
 router.get("/published", evaluation.findAllPublished)
