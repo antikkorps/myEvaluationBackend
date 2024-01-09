@@ -5,15 +5,17 @@ const prisma = new PrismaClient()
 const EvaluationCommentaireController = {
   // Create a new evaluationCommentaire
   async create(req, res) {
-    const { id, evaluation_id, user_id, commentaire, date } = req.body
+    const { id, commentaire, evaluation_item_id, createdAt, updatedAt, lastUpdateBy } =
+      req.body
     try {
       const newEvaluationCommentaire = await prisma.evaluation_Commentaire.create({
         data: {
           id,
-          evaluation_id,
-          user_id,
           commentaire,
-          date,
+          evaluation_item_id,
+          createdAt,
+          updatedAt,
+          lastUpdateBy,
         },
       })
       res.status(201).json(newEvaluationCommentaire)
@@ -67,17 +69,17 @@ const EvaluationCommentaireController = {
   // Update an evaluationCommentaire by ID
   async update(req, res) {
     const { id } = req.params
-    const { evaluationCommentaire_id, evaluation_id, user_id, commentaire, date } =
+    const { commentaire, evaluation_item_id, createdAt, updatedAt, lastUpdateBy } =
       req.body
     try {
       const updatedEvaluationCommentaire = await prisma.evaluation_Commentaire.update({
         where: { id: Number(id) },
         data: {
-          evaluationCommentaire_id,
-          evaluation_id,
-          user_id,
           commentaire,
-          date,
+          evaluation_item_id,
+          createdAt,
+          updatedAt,
+          lastUpdateBy,
         },
       })
       res.status(200).json(updatedEvaluationCommentaire)
