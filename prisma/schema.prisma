@@ -138,7 +138,9 @@ model Contrat {
   published   Boolean  @default(false)
   begin_date  DateTime @default(now())
   end_date    DateTime @default(now())
+  nombre_de_seances Int?
   theme       String
+  
 
   // client ID which references the Entreprise model
   client_id  Int

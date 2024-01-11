@@ -1,6 +1,5 @@
 const request = require("supertest")
 const app = require("../../app")
-const prisma = require("../prisma")
 
 describe("Test The root path", function () {
   test("It should response the GET method", async () => {
@@ -8,9 +7,17 @@ describe("Test The root path", function () {
     expect(response.statusCode).toBe(200)
   })
 }),
-  describe("E2E tests", () => {
+  describe("Auth", () => {
     let userToken
+    const user = {
+      email: "user@example.com",
+      password: process.env.USER_PASSWORD,
+    }
 
+    test("Signup - should throw an errror if email is not valid", async () => {
+      const response = await request(app).post("/auth/signup").send({ email: user.email })
+      expect(response.statusCode).toBe(500)
+    })
     test("should authenticate a user", async () => {
       const response = await request(app).post("/auth/login").send({
         email: "user@example.com",
