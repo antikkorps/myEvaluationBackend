@@ -65,9 +65,52 @@ const UserController = {
   // Find a user by ID
   async findOne(req, res) {
     const { id } = req.params
+    console.log(id)
     try {
       const user = await prisma.user.findUnique({
-        where: { id: Number(id) },
+        where: { id: String(id) },
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          email: true,
+          phone: true,
+          role: true,
+          fonction: true,
+          avatar: true,
+          entreprise: true,
+          evaluations_formateur: true,
+          evaluations_participant: true,
+          evaluation_commentaires: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      })
+      if (!user) {
+        return res.status(404).json({ error: "Utilisateur non trouvé." })
+      }
+      res.status(200).json(user)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error: "An error occured while retrieving the user. Please try again later.",
+      })
+    }
+  },
+
+  // Get the current user using the jwt token
+  async findCurrentUser(req, res) {
+    console.log("début de myprofile")
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1]
+    console.log(token)
+    if (!token) {
+      return res.status(403).send({ message: "No token provided." })
+    }
+    try {
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+      console.log(decodedToken)
+      const user = await prisma.user.findUnique({
+        where: { id: String(decodedToken.id) },
       })
       if (!user) {
         return res.status(404).json({ error: "Utilisateur non trouvé." })

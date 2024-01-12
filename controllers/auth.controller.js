@@ -46,8 +46,10 @@ const signin = (req, res) => {
         return res.status(401).json({ error: "Mot de passe ou utilisateur incorrect." })
       }
       const token = generateToken(user)
-      res.cookie("token", token, { httpOnly: true })
-      res.status(200).json({ token })
+      res
+        .cookie("token", token, { httpOnly: true })
+        .status(200)
+        .json({ auth: true, token })
     })
     .catch((error) => {
       console.error(error)

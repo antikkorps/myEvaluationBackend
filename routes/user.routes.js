@@ -12,6 +12,9 @@ router.post("/", isAdmin, users.create)
 //retrieve all users
 router.get("/all", users.findAll)
 
+//Get the current user
+router.get("/myprofile", users.findCurrentUser)
+
 //retrieve a single user with id
 router.get("/:id", users.findOne)
 
