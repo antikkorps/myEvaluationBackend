@@ -17,7 +17,7 @@ const corsOptions = {
   origin: process.env.CORS_ORIGIN,
 }
 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 
 //parse requests of content-type - application/json

@@ -100,7 +100,6 @@ const UserController = {
 
   // Get the current user using the jwt token
   async findCurrentUser(req, res) {
-    console.log("début de myprofile")
     const token = req.cookies.token || req.headers.authorization.split(" ")[1]
     console.log(token)
     if (!token) {
