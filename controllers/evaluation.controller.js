@@ -88,6 +88,41 @@ const EvaluationController = {
     }
   },
 
+  // Get all the evaluations from one user
+
+  async findAllByUser(req, res) {
+    const { id } = req.params
+    try {
+      const evaluations = await prisma.evaluation.findMany({
+        where: { user_id: Number(id) },
+      })
+      res.status(200).json(evaluations)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération des évaluations de l'utilisateur.",
+      })
+    }
+  },
+
+  // Get all the evaluations for one contrat
+  async findAllByContrat(req, res) {
+    const { id } = req.params
+    try {
+      const evaluations = await prisma.evaluation.findMany({
+        where: { contrat_id: Number(id) },
+      })
+      res.status(200).json(evaluations)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération des évaluations du contrat.",
+      })
+    }
+  },
+
   // Update evaluation by ID
   async update(req, res) {
     const { id } = req.params

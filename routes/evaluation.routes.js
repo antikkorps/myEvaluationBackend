@@ -17,6 +17,12 @@ router.get("/all", evaluation.findAll)
 //retrieve all published evaluations
 router.get("/published", evaluation.findAllPublished)
 
+//retrieve all evaluations by a specific user
+router.get("/user/:id", evaluation.findAllByUser)
+
+//retrieve all evaluations for a specific contrat
+router.get("/contrat/:id", evaluation.findAllByContrat)
+
 //retrieve a single evaluation with id
 router.get("/:id", evaluation.findOne)
 
