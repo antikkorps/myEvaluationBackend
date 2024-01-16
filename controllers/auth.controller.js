@@ -7,6 +7,15 @@ const { generateToken, generateResetToken } = require("../authentication/auth.js
 // Signup function
 const signup = (req, res) => {
   const { email, password } = req.body
+
+  const user = prisma.user.findUnique({ email })
+
+  if (user) {
+    return res
+      .status(409)
+      .json({ error: "l'utilisateur ou le mot de passe existe déjà." })
+  }
+
   const saltRounds = 10
   bcrypt.hash(password, saltRounds, async (err, hash) => {
     try {
