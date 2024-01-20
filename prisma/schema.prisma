@@ -277,7 +277,7 @@ enum FieldType {
 //value of the field that the user will fill
 model Field_Value {
   id          Int      @id @default(autoincrement())
-  value       String?
+  value       String? 
   field_id    Int
   field       Field    @relation(fields: [field_id], references: [id])
   form_id     Int

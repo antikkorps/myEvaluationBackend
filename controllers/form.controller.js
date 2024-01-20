@@ -27,15 +27,14 @@ const formController = {
   //adding a field to the form
   async createField(req, res) {
     const { id } = req.params
-    const { name, slug, description, type } = req.body
+    const { type, label, form } = req.body
     try {
       const newField = await prisma.field.create({
         data: {
           id,
-          name,
-          slug,
-          description,
           type,
+          label,
+          form,
         },
       })
       res.status(201).json(newField)
