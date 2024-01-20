@@ -26,6 +26,9 @@ model User {
   
   role    Role @default(USER)
 
+  //Forms created by the user
+  forms Form[]
+
   //relations to evaluations
   evaluations_formateur   Evaluation[] @relation("formateur")
   evaluations_participant Evaluation[] @relation("participant")
@@ -216,4 +219,71 @@ model Methode_Item {
 
   @@map("methode_items")
 }
+
+//CREATION OF FORMS BY THE USER
+model Form {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  published   Boolean  @default(true)
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id])
+  fields      Field[]
+  fieldValues Field_Value[]
+
+  @@map("forms")
+}
+
+model Field {
+  id          Int      @id @default(autoincrement())
+  type        FieldType   @default(TEXT)
+  label       String?
+  fieldValues Field_Value[]
+  form_id     Int
+  form        Form     @relation(fields: [form_id], references: [id])
+
+  @@map("fields")
+  
+}
+
+//enum for type field
+enum FieldType {
+  TEXT
+  TEXTAREA
+  RADIO
+  CHECKBOX
+  SELECT
+  DATE
+  TIME
+  DATETIME
+  EMAIL
+  NUMBER
+  PASSWORD
+  FILE
+  HIDDEN
+  COLOR
+  RANGE
+  TEL
+  URL
+  SEARCH
+  MONTH
+  WEEK
+  IMAGE
+  BUTTON
+  SUBMIT
+  RESET
+}
+
+//value of the field that the user will fill
+model Field_Value {
+  id          Int      @id @default(autoincrement())
+  value       String?
+  field_id    Int
+  field       Field    @relation(fields: [field_id], references: [id])
+  form_id     Int
+  form        Form     @relation(fields: [form_id], references: [id])
+
+  @@map("field_values")
+}
+
 
