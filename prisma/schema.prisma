@@ -247,7 +247,7 @@ model Field {
   
 }
 
-//enum for type field
+//ENUM FOR TYPE FIELD
 enum FieldType {
   TEXT
   TEXTAREA
@@ -275,7 +275,7 @@ enum FieldType {
   RESET
 }
 
-//value of the field that the user will fill
+//VALUE OF THE FIELD THAT THE USER_PARTICIPANT WILL FILL
 model Field_Value {
   id          Int      @id @default(autoincrement())
   value       String? 
