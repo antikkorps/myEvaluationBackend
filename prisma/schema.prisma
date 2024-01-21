@@ -56,7 +56,8 @@ enum Role {
   ADMIN
   MANAGER
   FORMATEUR
-  PARTICIPANT
+  CLIENT_PARTICIPANT
+  CLIENT_MANAGER
 
   @@map("roles")
 }
