@@ -5,14 +5,23 @@ const formController = {
   //create a new form
   async create(req, res) {
     const { id } = req.params
-    const { name, slug, description } = req.body
+    const { name, description, published, user_id, fields } = req.body
     try {
       const newForm = await prisma.form.create({
         data: {
           id,
           name,
-          slug,
           description,
+          published,
+          user_id,
+          fields,
+          fieldValues: {
+            create: fields.map((field) => ({
+              field_id: field.id,
+              value: field.value,
+            })),
+          },
+          //TODO Check if this is the right way to do it
         },
       })
       res.status(201).json(newForm)
