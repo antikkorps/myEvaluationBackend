@@ -33,9 +33,6 @@ model User {
   evaluations_formateur   Evaluation[] @relation("formateur")
   evaluations_participant Evaluation[] @relation("participant")
 
-  //Comments created and updated
-  evaluation_commentaires Evaluation_Commentaire[]
-
   //reset Token
 
   resetToken String? @db.VarChar(255)
@@ -81,43 +78,9 @@ model Evaluation {
   contrat_id       Int?
   contrat          Contrat?           @relation(fields: [contrat_id], references: [id])
   
-  //Methode items
-  evaluation_items Evaluation_Item[]
-
+  //Field values
+  field_Value     Field_Value[]
   @@map("evaluations")
-}
-
-model Evaluation_Item {
-  id                      Int                      @id @default(autoincrement())
-  evaluation_id           Int
-  methode_item_id         Int
-  note                    Int
-  commentaire             String?
-  evaluation              Evaluation               @relation(fields: [evaluation_id], references: [id])
-  methode_item            Methode_Item             @relation(fields: [methode_item_id], references: [id])
-  evaluation_commentaires Evaluation_Commentaire[]
-  
-
-  @@map("evaluation_items")
-}
-
-model Evaluation_Commentaire {
-  id                 Int             @id @default(autoincrement())
-  commentaire        String?
-  evaluation_item_id Int
-  evaluation_item    Evaluation_Item @relation(fields: [evaluation_item_id], references: [id])
-  
-  //created and updated
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  //Followed creation and update
-  lastUpdateBy_id String
-  lastUpdateBy User @relation(fields: [lastUpdateBy_id], references: [id])
-  
-  
-
-  @@map("evaluation_commentaires")
 }
 
 //ENTREPRISES AND CONTRACTS
@@ -193,32 +156,10 @@ model Methode {
   id               Int               @id @default(autoincrement())
   name             String
   description      String?
-  methode_items    Methode_Item[]
   contrat_methodes Contrat_Methode[]
   methode_tags     Methode_Tag[]
 
   @@map("methodes")
-}
-
-//ITEMS
-model Item {
-  id            Int            @id @default(autoincrement())
-  nom           String
-  description   String?
-  methode_items Methode_Item[]
-
-  @@map("items")
-}
-
-model Methode_Item {
-  id               Int               @id @default(autoincrement())
-  methode_id       Int
-  item_id          Int
-  methode          Methode           @relation(fields: [methode_id], references: [id])
-  item             Item              @relation(fields: [item_id], references: [id])
-  evaluation_items Evaluation_Item[]
-
-  @@map("methode_items")
 }
 
 //CREATION OF FORMS BY THE USER
@@ -283,6 +224,8 @@ model Field_Value {
   field       Field    @relation(fields: [field_id], references: [id])
   form_id     Int
   form        Form     @relation(fields: [form_id], references: [id])
+  evaluation_id Int?
+  evaluation    Evaluation? @relation(fields: [evaluation_id], references: [id])
 
   @@map("field_values")
 }
