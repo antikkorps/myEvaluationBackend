@@ -17,6 +17,7 @@ model User {
   password  String     @db.VarChar(255)
   fonction  String?    @db.VarChar(255)
   avatar    String?    @db.VarChar(255)
+  status    Status     @default(FREE)
 
   //entreprise
   entreprise_id Int?
@@ -57,6 +58,15 @@ enum Role {
   CLIENT_MANAGER
 
   @@map("roles")
+}
+
+enum Status {
+  FREE
+  PAID
+  CANCELED
+
+
+  @@map("status")
 }
 
 //EVALUATIONS
@@ -158,6 +168,7 @@ model Methode {
   description      String?
   contrat_methodes Contrat_Methode[]
   methode_tags     Methode_Tag[]
+  forms            Form[]
 
   @@map("methodes")
 }
@@ -172,6 +183,8 @@ model Form {
   user        User     @relation(fields: [user_id], references: [id])
   fields      Field[]
   fieldValues Field_Value[]
+  methode_id  Int?
+  methode     Methode? @relation(fields: [methode_id], references: [id])
 
   @@map("forms")
 }

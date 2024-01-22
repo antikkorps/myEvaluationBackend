@@ -17,6 +17,7 @@ const UserController = {
       role_id,
       fonction,
       avatar,
+      status,
     } = req.body
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
@@ -31,6 +32,7 @@ const UserController = {
           role_id,
           fonction,
           avatar,
+          status,
         },
       })
       res.status(201).json(newUser)
