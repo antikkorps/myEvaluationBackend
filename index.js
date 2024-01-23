@@ -1,7 +1,7 @@
 require("dotenv").config()
-const app = require("./app")
 const express = require("express")
 const cors = require("cors")
+const app = require("./app")
 const bcrypt = require("bcrypt")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
@@ -14,8 +14,8 @@ const prisma = new PrismaClient()
 // const app = express()
 
 const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: "*",
+  methods: "GET,POST,PUT,PATCH,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }
