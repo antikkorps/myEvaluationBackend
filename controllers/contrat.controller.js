@@ -97,6 +97,52 @@ const ContratController = {
     }
   },
 
+  //Get all published contracts by a specific user
+  async findAllPublishedByUser(req, res) {
+    const { userId } = req.params
+    try {
+      const page = parseInt(req.query.page) || 1
+      const limit = parseInt(req.query.limit) || 20
+      const offset = (page - 1) * limit
+
+      const contrats = await prisma.contrat.findMany({
+        where: { published: true, user: { id: Number(userId) } },
+        take: limit,
+        skip: offset,
+      })
+      res.status(200).json(contrats)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération des contrats publiés par l'utilisateur.",
+      })
+    }
+  },
+
+  //Get all contacts by a specific user and with a specific theme
+  async findAllByUserAndTheme(req, res) {
+    const { userId, theme } = req.params
+    try {
+      const page = parseInt(req.query.page) || 1
+      const limit = parseInt(req.query.limit) || 20
+      const offset = (page - 1) * limit
+
+      const contrats = await prisma.contrat.findMany({
+        where: { user: { id: Number(userId) }, theme },
+        take: limit,
+        skip: offset,
+      })
+      res.status(200).json(contrats)
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération des contrats par utilisateur et par thème.",
+      })
+    }
+  },
+
   // Update a contrat by ID
   async update(req, res) {
     const { id } = req.params
