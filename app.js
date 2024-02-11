@@ -6,7 +6,7 @@ const app = express()
 
 // welcome message
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the backend of myEvaluation app." })
+  res.json({ message: "Welcome to myEvaluation app API." })
 })
 
 module.exports = app
