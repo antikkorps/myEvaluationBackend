@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 const { generateToken, generateResetToken } = require("../authentication/auth.js")
+const mailService = require("../services/mail.service")
 
 // Signup function
 const signup = (req, res) => {
@@ -69,57 +70,24 @@ const signin = (req, res) => {
 }
 
 // Forgotten password function
-const forgottenPassword = (req, res) => {
-  const { email } = req.body
-  let resetToken
-  prisma.user
-    .findUnique({
-      where: {
-        email,
-      },
+const forgottenPassword = async (req, res) => {
+  try {
+    const { email } = req.body
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé." })
+    }
+
+    await mailService.sendMail(user) // Envoyer l'e-mail
+
+    return res.status(200).json({ message: "Email envoyé." })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({
+      error: "Une erreur est survenue lors de l'envoi de l'e-mail.",
     })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({ error: "Utilisateur non trouvé." })
-      }
-      resetToken = generateResetToken()
-      return prisma.user.update({
-        where: { email },
-        data: {
-          resetToken,
-          resetTokenExpiry: new Date(Date.now() + 3600000), // 1 hour
-        },
-      })
-    })
-    .then(() => {
-      const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST,
-        port: 587,
-        auth: {
-          user: process.env.MAIL_USERNAME,
-          pass: process.env.MAIL_PASSWORD,
-        },
-      })
-      const mailOptions = {
-        from: "noreply@myeval.com",
-        to: email,
-        subject: "Réinitialisation du mot de passe",
-        html: `
-          <p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
-          <p>Cliquez sur ce <a href="${process.env.CLIENT_URL}/reset-password/${resetToken}">lien</a> pour réinitialiser votre mot de passe.</p>
-          <p>Si vous n'avez pas demandé la réinitialisation de votre mot de passe, vous pouvez ignorer cet email.</p>
-        `,
-      }
-      console.log(transporter)
-      console.log(mailOptions)
-      res.status(200).json({ message: "Email envoyé." })
-    })
-    .catch((error) => {
-      console.error(error)
-      res.status(500).json({
-        error: "Une erreur est survenue lors de la réinitialisation du mot de passe.",
-      })
-    })
+  }
 }
 
 // Reset password function
