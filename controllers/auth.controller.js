@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 const { generateToken, generateResetToken } = require("../authentication/auth.js")
-const mailService = require("../services/mail.service")
+const MailService = require("../services/mail.service")
 
 // Signup function
 const signup = (req, res) => {
@@ -79,7 +79,7 @@ const forgottenPassword = async (req, res) => {
       return res.status(404).json({ error: "Utilisateur non trouvé." })
     }
 
-    await mailService.sendMail(user) // Envoyer l'e-mail
+    await MailService.sendMail(user) // Envoyer l'e-mail
 
     return res.status(200).json({ message: "Email envoyé." })
   } catch (error) {

@@ -1,11 +1,8 @@
 "use strict"
 const { generateResetToken } = require("../authentication/auth.js")
-
-import nodemailer, { Transporter } from "nodemailer"
+const nodemailer = require("nodemailer")
 
 class MailService {
-  private transporter: Transporter
-
   constructor() {
     this.transporter = nodemailer.createTransport({
       service: "gmail",
