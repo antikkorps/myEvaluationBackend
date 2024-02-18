@@ -13,9 +13,23 @@ class MailService {
     })
   }
 
+  async sendWelcomeMail(user) {
+    const verifyMailToken = generateVerifyMailToken(user)
+    const welcomeLink = `${process.env.BASE_URL}/verify-mail/${verifyMailToken}`
+    const mailOptions = {
+      from: process.env.MAIL_USER,
+      to: user.email,
+      subject: "welcome on board",
+      text: `Hello ${user.username}, you have joined myEvaluation. Click on the following link to verify your password: ${resetLink}`,
+    }
+    await this.transporter.sendMail(mailOptions)
+  }
+
+}
+
   async forgottenPassword(user) {
-    const reseToken = generateResetToken(user)
-    const resetLink = `${process.env.BASE_URL}/reset-password/${reseToken}`
+    const resetToken = generateResetToken(user)
+    const resetLink = `${process.env.BASE_URL}/reset-password/${resetToken}`
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: user.email,
