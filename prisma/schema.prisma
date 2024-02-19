@@ -43,6 +43,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  //mail verified
+  mailVerified Boolean @default(false)
+
   //index on email et name
   @@index([email], name: "email")
   @@index([lastName], name: "lastName")
