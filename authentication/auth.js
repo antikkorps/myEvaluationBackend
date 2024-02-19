@@ -105,10 +105,19 @@ function getEmailFromToken(req, res, next) {
   })
 }
 
+//generate the validationToken to validate the user email
+const generateValidationToken = (payload) => {
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  })
+  return token
+}
+
 module.exports = {
   generateToken,
   generateResetToken,
   verifyToken,
   isAdmin,
   getEmailFromToken,
+  generateValidationToken,
 }

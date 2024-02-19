@@ -1,5 +1,5 @@
 "use strict"
-const { generateResetToken } = require("../authentication/auth.js")
+const { generateResetToken, generateValidationToken } = require("../authentication/auth.js")
 const nodemailer = require("nodemailer")
 
 class MailService {
@@ -14,16 +14,17 @@ class MailService {
   }
 
   async sendWelcomeMail(user) {
-    const verifyMailToken = generateVerifyMailToken(user)
+    const verifyMailToken = generateValidationToken(user)
     const welcomeLink = `${process.env.BASE_URL}/verify-mail/${verifyMailToken}`
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: user.email,
       subject: "welcome on board",
-      text: `Hello ${user.username}, you have joined myEvaluation. Click on the following link to verify your password: ${resetLink}`,
+      text: `Hello ${user.username}, you have joined myEvaluation. Click on the following link to verify your password: ${welcomeLink}`,
     }
     await this.transporter.sendMail(mailOptions)
   }
+
 
 
   async forgottenPassword(user) {
@@ -39,4 +40,4 @@ class MailService {
   }
 }
 
-module.exports = MailService
+module.exports = new MailService()

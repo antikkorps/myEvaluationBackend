@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt")
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 const { generateToken, generateResetToken } = require("../authentication/auth.js")
-const MailService = require("../services/mail.service")
+const mailService = require("../services/mail.service")
 
 // Signup function
 const signup = (req, res) => {
@@ -36,6 +36,55 @@ const signup = (req, res) => {
     }
   })
 }
+// Send the email with to link to send back the token to the server
+const getWelcomeEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé." });
+    }
+
+    await mailService.sendWelcomeMail(user); // Send the email
+
+    return res.status(200).json({ message: "Email envoyé." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Une erreur est survenue lors de l'envoi de l'e-mail.",
+    });
+  }
+
+}
+
+// Verification function to ensure that the user has access to the email address he provided
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const decodedToken = decodedToken(token);
+    const decodedEmail = decodedToken.email;
+
+    const user = await prisma.user.findUnique({ where: { email: decodedEmail } });
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé." });
+    }
+
+    await prisma.user.update({
+      where: { email: decodedEmail },
+      data: { isVerified: true },
+    });
+
+    return res.status(200).json({ message: "E-mail vérifié avec succès." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Une erreur est survenue lors de la vérification de l'e-mail.",
+    });
+  }
+};
 
 // Signin function
 const signin = (req, res) => {
@@ -78,7 +127,7 @@ const forgottenPassword = async (req, res) => {
       return res.status(404).json({ error: "Utilisateur non trouvé." })
     }
 
-    await MailService.sendMail(user) // Envoyer l'e-mail
+    await mailService.forgottenPassword(user) // Send mail
 
     return res.status(200).json({ message: "Email envoyé." })
   } catch (error) {
@@ -140,4 +189,6 @@ module.exports = {
   signin,
   forgottenPassword,
   resetPassword,
+  getWelcomeEmail,
+  verifyEmail,  
 }
