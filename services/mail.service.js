@@ -25,7 +25,6 @@ class MailService {
     await this.transporter.sendMail(mailOptions)
   }
 
-}
 
   async forgottenPassword(user) {
     const resetToken = generateResetToken(user)
