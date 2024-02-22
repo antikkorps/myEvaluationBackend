@@ -66,6 +66,7 @@ enum Role {
 enum Status {
   FREE
   PAID
+  PREMIUM
   CANCELED
 
 
