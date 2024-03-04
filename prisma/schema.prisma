@@ -108,6 +108,7 @@ model Company {
   logo String?
   contrats Contrat[]
   users     User[]
+  forms     Form[]
 
   @@map("companies")
 }
@@ -189,6 +190,8 @@ model Form {
   fieldValues Field_Value[]
   methode_id  Int?
   methode     Methode? @relation(fields: [methode_id], references: [id])
+  company_id  Int?
+  company     Company? @relation(fields: [company_id], references: [id])
 
   @@map("forms")
 }
@@ -231,6 +234,7 @@ enum FieldType {
   BUTTON
   SUBMIT
   RESET
+  BOOLEAN
 }
 
 //VALUE OF THE FIELD THAT THE USER_PARTICIPANT WILL FILL
