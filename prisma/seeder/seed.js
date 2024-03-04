@@ -5,22 +5,37 @@ const bcrypt = require("bcrypt")
 const prisma = new PrismaClient()
 
 async function main() {
-    // // Create an admin user
-    // const admin = await prisma.user.create({
-    //     data: {
-    //         email: "admin@example.com",
-    //         password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 10),
-    //         role: "ADMIN",
-    //     },
-    // })
-    // // Create a simple user for testing purposes
-    // const testUser = await prisma.user.create({
-    //     data: {
-    //         email: "user@example.com",
-    //         password: await bcrypt.hash(process.env.USER_PASSWORD, 10),
-    //         role: "USER",
-    //     },
-    // })
+    // Create an admin user
+    let adminUser = await prisma.user.findUnique({
+        where: {
+            email: "admin@example.com",
+        },
+    })
+    if (!adminUser) {
+        adminUser = await prisma.user.create({
+            data: {
+                email: "admin@example.com",
+                password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 10),
+                role: "ADMIN",
+            },
+        })
+    }
+    // Create a simple user for testing purposes
+    let testUser = await prisma.user.findUnique({
+        where: {
+            email: "user@example.com",
+        },
+    })
+
+    if (!testUser) {
+        testUser = await prisma.user.create({
+            data: {
+                email: "user@example.com",
+                password: await bcrypt.hash(process.env.USER_PASSWORD, 10),
+                role: "USER",
+            },
+        })
+    }
 
     // Create 10 regular users
     for (let i = 0; i < 10; i++) {
@@ -33,8 +48,9 @@ async function main() {
     }
 
     // Create 10 PARTICIPANTS users
+    const users = []
     for (let i = 0; i < 10; i++) {
-        await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 email: faker.internet.email(),
                 password: await bcrypt.hash(faker.internet.password(), 10),
@@ -42,6 +58,7 @@ async function main() {
                 role: "CLIENT_PARTICIPANT",
             },
         })
+        users.push(user)
     }
 
     // Create 10 companies
@@ -69,9 +86,25 @@ async function main() {
         })
     }
 
-    // Create 10 fields
+    // Create 10 forms
+    const forms = []
     for (let i = 0; i < 10; i++) {
-        await prisma.field.create({
+        const form = await prisma.form.create({
+            data: {
+                name: faker.lorem.words(3),
+                description: faker.lorem.sentences(2),
+                published: faker.datatype.boolean(),
+                user_id: users[i].id,
+                company_id: faker.number.int({ min: 1, max: 10 }),
+            },
+        })
+        forms.push(form)
+    }
+
+    // Create 10 fields
+    const fields = []
+    for (let i = 0; i < 10; i++) {
+        const field = await prisma.field.create({
             data: {
                 //create  a random type using enum Fieldtype
                 type: faker.helpers.arrayElement([
@@ -101,10 +134,26 @@ async function main() {
                     "BOOLEAN",
                 ]),
                 label: faker.lorem.word(),
-                form_id: faker.number.int({ min: 1, max: 10 }),
+                form_id: forms[i].id,
             },
         })
+        fields.push(field)
     }
+
+    // Create 10 fields value
+    const fieldsValues = []
+    for (let i = 0; i < 10; i++) {
+        const fieldValue = await prisma.field_Value.create({
+            data: {
+                value: faker.lorem.word(),
+                field_id: fields[i].id,
+                form_id: forms[i].id,
+                evaluation_id: fields[i].id,
+            },
+        })
+        fieldsValues.push(fieldValue)
+    }
+
     // // Create 10 methods
     // for (let i = 0; i < 10; i++) {
     //   await prisma.methode.create({
