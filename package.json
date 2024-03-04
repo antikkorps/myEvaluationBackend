@@ -6,7 +6,7 @@
   "scripts": {
     "seed": "node prisma/seeder/seed.js",
     "test": "jest --detectOpenHandles",
-    "dev": "nodemon index.js"
+    "dev": "node --watch index.js"
   },
   "keywords": [
     "nodejs",
