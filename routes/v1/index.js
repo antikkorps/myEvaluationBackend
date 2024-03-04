@@ -10,6 +10,7 @@ const roleRoutes = require("../role.routes")
 const tagRoutes = require("../tag.routes")
 const userRoutes = require("../user.routes")
 const formRoutes = require("../form.routes")
+const fieldRoutes = require("../field.routes")
 
 router.use("/entreprise", companyRoutes)
 router.use("/contrat", contratRoutes)
@@ -20,5 +21,6 @@ router.use("/role", roleRoutes)
 router.use("/tag", tagRoutes)
 router.use("/user", userRoutes)
 router.use("/formulaire", formRoutes)
+router.use("/field", fieldRoutes)
 
 module.exports = router
