@@ -17,6 +17,7 @@ async function main() {
                 email: "admin@example.com",
                 password: await bcrypt.hash(process.env.ADMIN_PASSWORD, 10),
                 role: "ADMIN",
+                avatar: faker.image.avatar(),
             },
         })
     }
@@ -33,6 +34,7 @@ async function main() {
                 email: "user@example.com",
                 password: await bcrypt.hash(process.env.USER_PASSWORD, 10),
                 role: "USER",
+                avatar: faker.image.avatar(),
             },
         })
     }
