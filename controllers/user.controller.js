@@ -83,9 +83,10 @@ const UserController = {
                     entreprise: true,
                     evaluations_formateur: true,
                     evaluations_participant: true,
-                    evaluation_commentaires: true,
+                    forms: true,
                     createdAt: true,
                     updatedAt: true,
+                    mailVerified: true,
                 },
             })
             if (!user) {

@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/api/v1/entreprise/all
+  url: {{baseURL}}{{apiRoute}}/entreprise/all
   body: none
   auth: bearer
 }
@@ -15,5 +15,5 @@ headers {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NGE2YzUwLTAyMzMtNDBlOC05MGZjLWFmZjNjNjc1YmE1YSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcwNTg1ODg5OSwiZXhwIjoxNzA2MDMxNjk5fQ.bYuKyH6nTjjqPzk0f-1gVoEVBXSTKm0xwgJsmZQ6xGo
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NGE2YzUwLTAyMzMtNDBlOC05MGZjLWFmZjNjNjc1YmE1YSIsInN0YXR1cyI6IkZSRUUiLCJyb2xlIjoiQURNSU4iLCJtYWlsVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MTExMTExNDYsImV4cCI6MTcxMTI4Mzk0Nn0.c10jRFZEozuq8pyrkJ4Z0mh0rFACO8BJveaBBYVKu10
 }
