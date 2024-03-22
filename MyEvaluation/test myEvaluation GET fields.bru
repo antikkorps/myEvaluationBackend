@@ -1,0 +1,19 @@
+meta {
+  name: test myEvaluation GET fields
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8080/api/v1/field/all
+  body: none
+  auth: bearer
+}
+
+headers {
+  User-Agent: insomnia/8.4.1
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NGE2YzUwLTAyMzMtNDBlOC05MGZjLWFmZjNjNjc1YmE1YSIsInN0YXR1cyI6IkZSRUUiLCJyb2xlIjoiQURNSU4iLCJtYWlsVmVyaWZpZWQiOmZhbHNlLCJpYXQiOjE3MDk1NTE3OTIsImV4cCI6MTcwOTcyNDU5Mn0.U4sr9jzIzu3zariWzvjnl7t4wuPJN84op_T2-q3Dzrs
+}

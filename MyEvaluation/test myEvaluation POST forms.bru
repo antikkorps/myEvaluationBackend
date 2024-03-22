@@ -1,0 +1,29 @@
+meta {
+  name: test myEvaluation POST forms
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:8080/api/v1/formulaire/
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/8.4.1
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0NGE2YzUwLTAyMzMtNDBlOC05MGZjLWFmZjNjNjc1YmE1YSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcwNTg1ODg5OSwiZXhwIjoxNzA2MDMxNjk5fQ.bYuKyH6nTjjqPzk0f-1gVoEVBXSTKm0xwgJsmZQ6xGo
+}
+
+body:json {
+  {
+  	"name" : "Formulaire de test",
+  	"description" : "Ceci est un test",
+  	"published" : "true",
+  	"user_id" : "344a6c50-0233-40e8-90fc-aff3c675ba5a"
+  }
+}

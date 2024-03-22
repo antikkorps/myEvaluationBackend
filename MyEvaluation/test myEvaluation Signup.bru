@@ -1,0 +1,25 @@
+meta {
+  name: test myEvaluation Signup
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/v1/auth/signup
+  body: formUrlEncoded
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/x-www-form-urlencoded
+  User-Agent: insomnia/8.4.1
+}
+
+auth:bearer {
+  token: a2b7c0368d22cf57442d7abe2d3ef5b0365b83d3f69ad5bd4e85fe088ccbff5dc4cad224ce7cd104cac443df45564176790f4232900adc965defa0abf6a2a14c525db36567b3688c537f0412d266ff040fc5aee013c6bd8ad39c913e2331e2566d131343ba5c8d52951831960f4c4149f258a50863d6cb53e533d67d51196c9d
+}
+
+body:form-urlencoded {
+  email: mina.feil36@ethereal.email
+  password: Useruser1*
+}
